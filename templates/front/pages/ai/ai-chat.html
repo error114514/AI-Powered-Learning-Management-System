@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>AI问答</title>
+    <link rel="stylesheet" type="text/css" href="../../layui/css/layui.css">
+    <style type="text/css">
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            overflow: hidden; /* 禁止页面整体滚动 */
+        }
+        
+        .ai-chat-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+        
+        .ai-chat-header {
+            text-align: center;
+            margin-bottom: 15px;
+            flex-shrink: 0; /* 防止头部被压缩 */
+        }
+        
+        .ai-chat-header h2 {
+            color: #1976d2;
+            margin: 0;
+            font-size: 20px;
+        }
+        
+        .ai-chat-messages {
+            flex: 1;
+            overflow-y: auto; /* 只在消息区域显示滚动条 */
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            min-height: 0; /* 确保flex子元素可以正确收缩 */
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .message.user {
+            align-items: flex-end;
+        }
+        
+        .message.ai {
+            align-items: flex-start;
+        }
+        
+        .message-content {
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 18px;
+            line-height: 1.5;
+        }
+        
+        .message.user .message-content {
+            background-color: #e3f2fd;
+            color: #1565c0;
+            border-bottom-right-radius: 4px;
+        }
+        
+        .message.ai .message-content {
+            background-color: #f1f1f1;
+            color: #333;
+            border-bottom-left-radius: 4px;
+        }
+        
+        .message-time {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+        
+        .ai-chat-input {
+            display: flex;
+            gap: 10px;
+            flex-shrink: 0; /* 防止输入框被压缩 */
+            padding: 10px 0;
+            background-color: #f5f5f5;
+        }
+        
+        .ai-chat-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 14px;
+            outline: none;
+        }
+        
+        .ai-chat-input input:focus {
+            border-color: #1976d2;
+        }
+        
+        .ai-chat-input button {
+            padding: 0 25px;
+            background-color: #1976d2;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        
+        .ai-chat-input button:hover {
+            background-color: #1565c0;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #1976d2;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="ai-chat-container">
+        <div class="ai-chat-header">
+            <h2>AI智能问答</h2>
+        </div>
+        
+        <div class="ai-chat-messages" id="chat-messages">
+            <div class="message ai">
+                <div class="message-content">
+                    你好！我是AI助手，有什么可以帮助你的吗？
+                </div>
+                <div class="message-time" id="initial-time"></div>
+            </div>
+        </div>
+        
+        <div class="ai-chat-input">
+            <input type="text" id="user-input" placeholder="输入你的问题..." autocomplete="off">
+            <button id="send-btn">发送</button>
+        </div>
+    </div>
+    
+    <script src="../../layui/layui.js"></script>
+    <script src="../../js/vue.js"></script>
+    <script>
+        // 设置初始时间
+        document.getElementById('initial-time').textContent = new Date().toLocaleTimeString();
+        
+        // 聊天历史
+        let chatHistory = [];
+        
+        // 初始化消息
+        chatHistory.push({
+            role: 'assistant',
+            content: '你好！我是AI助手，有什么可以帮助你的吗？'
+        });
+        
+        // 发送消息函数（流式）
+        async function sendMessage() {
+            const userInput = document.getElementById('user-input');
+            const message = userInput.value.trim();
+            
+            if (!message) return;
+            
+            // 添加用户消息到界面
+            addMessage('user', message);
+            userInput.value = '';
+            
+            // 添加用户消息到历史
+            chatHistory.push({
+                role: 'user',
+                content: message
+            });
+            
+            // 创建AI回复消息元素（用于流式显示）
+            const aiMessageElement = document.createElement('div');
+            aiMessageElement.className = 'message ai';
+            aiMessageElement.innerHTML = `
+                <div class="message-content"></div>
+                <div class="message-time">${new Date().toLocaleTimeString()}</div>
+            `;
+            document.getElementById('chat-messages').appendChild(aiMessageElement);
+            const contentElement = aiMessageElement.querySelector('.message-content');
+            document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
+            
+            // 构建表单数据
+            const formData = new URLSearchParams();
+            chatHistory.forEach((msg, index) => {
+                formData.append(`messages[${index}][role]`, msg.role);
+                formData.append(`messages[${index}][content]`, msg.content);
+            });
+            
+            try {
+                // 使用EventSource进行流式请求
+                const token = localStorage.getItem('Token') || '';
+                const response = await fetch('http://localhost:8080/dj_intellrnmgmtsystem/ai/chat/stream', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Token': token
+                    },
+                    body: formData.toString()
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let aiResponse = '';
+                
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    
+                    const chunk = decoder.decode(value, { stream: true });
+                    const lines = chunk.split('\n');
+                    
+                    for (const line of lines) {
+                        if (line.startsWith('data: ')) {
+                            const dataStr = line.substring(6);
+                            
+                            if (dataStr === '[DONE]') {
+                                // 流结束，保存到历史
+                                chatHistory.push({
+                                    role: 'assistant',
+                                    content: aiResponse
+                                });
+                                return;
+                            }
+                            
+                            try {
+                                const data = JSON.parse(dataStr);
+                                if (data.error) {
+                                    contentElement.textContent = '抱歉，' + data.error;
+                                    return;
+                                }
+                                if (data.content) {
+                                    aiResponse += data.content;
+                                    contentElement.textContent = aiResponse;
+                                    document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
+                                }
+                            } catch (e) {
+                                // 忽略解析错误
+                            }
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                contentElement.textContent = '抱歉，发生了错误，请稍后再试。';
+            }
+        }
+        
+        // 添加消息到界面
+        function addMessage(role, content) {
+            const messagesContainer = document.getElementById('chat-messages');
+            const messageElement = document.createElement('div');
+            messageElement.className = `message ${role}`;
+            messageElement.innerHTML = `
+                <div class="message-content">
+                    ${content}
+                </div>
+                <div class="message-time">
+                    ${new Date().toLocaleTimeString()}
+                </div>
+            `;
+            messagesContainer.appendChild(messageElement);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        // 绑定发送按钮点击事件
+        document.getElementById('send-btn').addEventListener('click', sendMessage);
+        
+        // 绑定输入框回车事件
+        document.getElementById('user-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>

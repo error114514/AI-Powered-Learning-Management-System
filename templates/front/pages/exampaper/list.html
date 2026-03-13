@@ -1,0 +1,388 @@
+<!-- 论坛中心 -->
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>论坛中心</title>
+		<link rel="stylesheet" href="../../layui/css/layui.css">
+		<!-- 样式 -->
+		<link rel="stylesheet" href="../../css/style.css" />
+		<!-- 主题（主要颜色设置） -->
+		<link rel="stylesheet" href="../../css/theme.css" />
+		<!-- 通用的css -->
+		<link rel="stylesheet" href="../../css/common.css" />
+	</head>
+	<style>
+		#swiper {
+			overflow: hidden;
+		}
+		#swiper .layui-carousel-ind li {
+			width: 16px;
+			height: 5px;
+			border-width: 0;
+			border-style: solid;
+			border-color: rgba(0,0,0,.3);
+			border-radius: 3px;
+			background-color: rgba(208, 208, 208, 1);
+			box-shadow: 0 0 6px rgba(255,0,0,.8);
+		}
+		#swiper .layui-carousel-ind li.layui-this {
+			width: 50px;
+			height: 5px;
+			border-width: 0px;
+			border-style: solid;
+			border-color: rgba(0, 0, 0, 0.3);
+			border-radius: 0;
+			background-color: rgba(255, 255, 255, 1);
+			box-shadow: 0 0  6px rgba(255,0,0,.8);
+		}
+		
+		.index-title {
+		    text-align: center;
+		    box-sizing: border-box;
+		    width: 980px;
+		    display: flex;
+		    justify-content: center;
+		    align-items: center;
+		    flex-direction: column;
+		}
+		.forum-container .btn-container {
+			display: flex;
+			    align-items: center;
+			    box-sizing: border-box;
+			    width: 100%;
+			    flex-wrap: wrap;
+		}
+		.forum-container .btn-container button i {
+			margin-right: 4px;
+		}
+		
+		.layui-laypage .layui-laypage-count {
+		  padding: 0 10px;
+		}
+		.layui-laypage .layui-laypage-skip {
+		  padding-left: 10px;
+		}
+.paper-container thead tr {
+			background-color: #1976d2;
+			color: #000;
+		}
+
+	</style>
+	<body>
+
+		<div id="app" v-cloak>
+
+			<!-- 轮播图 -->
+			
+			<!-- 标题 -->
+			<!-- <h2 class="index-title">FORUM / INFORMATION</h2>
+			<div class="line-container">
+				<p class="line"> 论坛中心 </p>
+			</div> -->
+			<div class="index-title" :style='{"padding":"10px","boxShadow":"0 0 0px rgba(255,0,0,.8)","margin":"10px auto","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#1976d2","color":"rgba(255, 255, 255, 1)","borderRadius":"4px","borderWidth":"0","fontSize":"30px","borderStyle":"solid","height":"auto"}'>
+			  <span>EXAM / PAPER</span><span>学习中心</span>
+			</div>
+			<!-- 标题 -->
+
+			<div class="paper-container">
+				<table class="layui-table" lay-skin="nob">
+					<thead>
+						<tr>
+							<th>试卷名称</th>
+							<th>考试时长</th>
+							<th>创建时间</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="(item,index) in dataList" v-bind:key="index">
+							<td>{{item.name}}</td>
+							<td>{{item.time}}分钟</td>
+							<td>{{item.addtime}}</td>
+							<td>
+								<button @click="exam(item.id)" type="button" class="layui-btn layui-btn-radius btn-theme">
+									<i class="layui-icon">&#xe679;</i> 考试
+								</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="pager" id="pager" :style="{textAlign:'center'}"></div>
+			</div>
+			
+			<!-- Face Verification Dialog -->
+			<div v-show="showFaceVerification" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 9999;">
+				<div style="background: white; padding: 30px; border-radius: 10px; width: 400px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+					<h3 style="margin: 0 0 20px 0; text-align: center; color: #333;">人脸验证</h3>
+					<p style="margin-bottom: 20px; color: #666; text-align: center;">开始考试前需要进行人脸验证</p>
+					<input type="file" id="faceInput" accept="image/*" style="display: none;">
+					<div style="text-align: center; margin-bottom: 20px;">
+						<button @click="selectFacePhoto" type="button" class="layui-btn" style="margin-right: 10px;">
+							<i class="layui-icon">&#xe67c;</i> 选择照片
+						</button>
+						<button @click="verifyFace" type="button" class="layui-btn layui-btn-normal" :disabled="verifying || !capturedFace">
+							<i class="layui-icon">&#xe605;</i> {{ verifying ? '验证中...' : '开始验证' }}
+						</button>
+					</div>
+					<div v-if="capturedFace" style="text-align: center;">
+						<img :src="facePreviewUrl" style="max-width: 100%; max-height: 200px; border-radius: 8px;">
+					</div>
+					<div style="text-align: center; margin-top: 20px;">
+						<button @click="showFaceVerification = false" type="button" class="layui-btn layui-btn-primary">
+							取消
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- layui -->
+		<script src="../../layui/layui.js"></script>
+		<!-- vue -->
+		<script src="../../js/vue.js"></script>
+		<!-- 组件配置信息 -->
+		<script src="../../js/config.js"></script>
+		<!-- 扩展插件配置信息 -->
+		<script src="../../modules/config.js"></script>
+		<!-- 工具方法 -->
+		<script src="../../js/utils.js"></script>
+
+		<script>
+			console.log('=== 考试列表页面JavaScript开始执行 ===');
+			var vue = new Vue({
+				el: '#app',
+				data: {
+					// 轮播图
+					swiperList: [{
+						img: '../../img/banner.jpg'
+					}],
+					dataList: [],
+					showFaceVerification: false,
+					currentExamId: null,
+					capturedFace: null,
+					facePreviewUrl: '',
+					verifying: false
+				},
+				filters: {
+					newsDesc: function(val) {
+						if (val) {
+							if (val.length > 200) {
+								return val.substring(0, 200).replace(/<[^>]*>/g).replace(/undefined/g, '');
+							} else {
+								return val.replace(/<[^>]*>/g).replace(/undefined/g, '');
+							}
+						}
+						return '';
+					}
+				},
+				methods: {
+					jump(url) {
+						jump(url)
+					},
+					// 进入考试
+					exam(id) {
+						// 检查用户是否已登录
+						var token = localStorage.getItem('Token');
+						var userid = localStorage.getItem('userid');
+						console.log('=== 检查登录状态 ===');
+						console.log('Token:', token);
+						console.log('UserID:', userid);
+						
+						if (!token || token === 'null' || token === '' || !userid) {
+							layui.layer.msg('请先登录后再参加考试', {time: 2000, icon: 5});
+							setTimeout(function() {
+								window.location.href = '../login.html';
+							}, 2000);
+							return;
+						}
+						
+						this.currentExamId = id;
+						this.showFaceVerification = true;
+					},
+					selectFacePhoto() {
+						console.log('=== selectFacePhoto方法被调用 ===');
+						document.getElementById('faceInput').click();
+					},
+					verifyFace() {
+						if (!this.capturedFace) {
+							layui.layer.msg('请先选择照片', {time: 2000, icon: 5});
+							return;
+						}
+						
+						var token = localStorage.getItem('Token');
+						var userid = localStorage.getItem('userid');
+						
+						console.log('=== 开始人脸验证 ===');
+						console.log('Token:', token);
+						console.log('UserID:', userid);
+						console.log('文件:', this.capturedFace.name, this.capturedFace.size);
+						
+						if (!token || token === 'null' || token === '') {
+							layui.layer.msg('登录已过期，请重新登录', {time: 2000, icon: 5});
+							setTimeout(function() {
+								window.location.href = '../login.html';
+							}, 2000);
+							return;
+						}
+						
+						this.verifying = true;
+						var formData = new FormData();
+						formData.append('file', this.capturedFace);
+						
+						var that = this;
+						var url = layui.http.baseurl + 'file/upload2';
+						console.log('=== 请求URL:', url);
+						
+						layui.jquery.ajax({
+							url: url,
+							type: 'POST',
+							data: formData,
+							processData: false,
+							contentType: false,
+							headers: {
+								'Token': token
+							},
+							success: function(res) {
+								console.log('=== API响应:', res);
+								that.verifying = false;
+								if (res.code === 0 && res.result) {
+									console.log('=== 匹配的用户ID:', res.result);
+									console.log('=== 当前登录用户ID:', userid);
+									if (res.result === userid || res.result === String(userid)) {
+										layui.layer.msg('验证成功', {time: 2000, icon: 6});
+										that.showFaceVerification = false;
+										// Delete previous records and start exam
+										layui.http.request(`examrecord/deleteRecords?userid=${userid}&paperid=${that.currentExamId}`, 'post', {}, function(delRes) {
+											window.parent.location.href = `./exam.html?id=${that.currentExamId}`;
+										});
+									} else {
+										layui.layer.msg('人脸与当前登录用户不匹配', {time: 2000, icon: 5});
+									}
+								} else {
+									layui.layer.msg(res.msg || '人脸识别失败，请重试', {time: 2000, icon: 5});
+								}
+							},
+							error: function(xhr, status, error) {
+								console.error('=== AJAX错误 ===');
+								console.error('Status:', status);
+								console.error('Error:', error);
+								console.error('Response:', xhr.responseText);
+								that.verifying = false;
+								
+								try {
+									var res = JSON.parse(xhr.responseText);
+									layui.layer.msg(res.msg || '验证失败，请重试', {time: 2000, icon: 5});
+								} catch(e) {
+									layui.layer.msg('验证失败，请重试', {time: 2000, icon: 5});
+								}
+							}
+						});
+					}
+				}
+			})
+
+			layui.use(['layer', 'element', 'carousel', 'laypage', 'http', 'jquery'], function() {
+				console.log('=== layui.use回调函数开始执行 ===');
+				var layer = layui.layer;
+				var element = layui.element;
+				var carousel = layui.carousel;
+				var laypage = layui.laypage;
+				var http = layui.http;
+				var jquery = layui.jquery;
+				
+				// Face photo selection handler - moved inside layui.use to ensure DOM is ready
+				var faceInput = document.getElementById('faceInput');
+				console.log('=== faceInput元素:', faceInput);
+				if (faceInput) {
+					console.log('=== 正在添加change事件监听器 ===');
+					faceInput.addEventListener('change', function(e) {
+						console.log('=== 文件输入change事件触发 ===');
+						console.log('=== 选择的文件:', e.target.files);
+						const file = e.target.files[0];
+						if (file) {
+							console.log('=== 文件详情:', file.name, file.size, file.type);
+							vue.$set(vue, 'capturedFace', file);
+							const reader = new FileReader();
+							reader.onload = function(event) {
+								console.log('=== 文件读取完成,设置预览URL ===');
+								vue.$set(vue, 'facePreviewUrl', event.target.result);
+							};
+							reader.readAsDataURL(file);
+						}
+					});
+					console.log('=== change事件监听器添加完成 ===');
+				} else {
+					console.error('=== 错误: faceInput元素未找到 ===');
+				}
+
+				var limit = 5;
+
+				// 获取轮播图 数据
+				http.request('config/list', 'get', {
+					page: 1,
+					limit: 5
+				}, function(res) {
+					if (res.data.list.length > 0) {
+						var swiperItemHtml = '';
+						for (let item of res.data.list) {
+							if (item.name.indexOf('picture') >= 0 && item.value && item.value != "" && item.value != null) {
+								swiperItemHtml +=
+									'<div>' +
+									'<img class="swiper-item" style="width: 100%;height: 100%;object-fit:cover;" src="' + item.value + '">' +
+									'</div>';
+							}
+						}
+						jquery('#swiper-item').html(swiperItemHtml);
+						// 轮播图
+						vue.$nextTick(() => {
+						  carousel.render({
+						  	elem: '#swiper',
+							width: '100%',
+						  	height: '500px',
+						  	arrow: 'always',
+						  	anim: 'fade',
+						  	autoplay: 'true',
+						  	interval: '3000',
+						  	indicator: 'inside'
+						  });
+						
+						})
+					}
+				});
+
+				// 获取列表数据
+				http.request('exampaper/list', 'get', {
+					page: 1,
+					limit: limit,
+					status: 1
+				}, function(res) {
+					vue.dataList = res.data.list
+					// 分页
+					laypage.render({
+						elem: 'pager',
+						count: res.data.total,
+						limit: limit,
+						groups: 5,
+						layout: ["prev","page","next","skip","count"],
+						theme: '#000000',
+						jump: function(obj, first) {
+							//首次不执行
+							if (!first) {
+								http.request('exampaper/list', 'get', {
+									page: obj.curr,
+									limit: obj.limit,
+									status: 1
+								}, function(res) {
+									vue.dataList = res.data.list
+								})
+							}
+						}
+					});
+				})
+
+			});
+		</script>
+	</body>
+</html>
