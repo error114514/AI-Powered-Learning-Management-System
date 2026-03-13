@@ -1,0 +1,16 @@
+大学毕业设计：基于大模型和人脸识别的智能化学习管理系统的设计与实现
+--运行方式：
+终端打开输入：
+
+python  manage.py runserver   --insecure 0.0.0.0:8080
+
+
+http://localhost:8080/dj_intellrnmgmtsystem/front/pages/login/login.html
+
+http://localhost:8080/dj_intellrnmgmtsystem/front/admin/dist/index.html#/login
+
+管理员 admin admin
+
+用户 学生11 123456
+
+教师 教师1 123456
