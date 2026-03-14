@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>登录</title>
+    <title>智能化学习系统</title>
     <!-- 关键：首屏隐藏 #app，避免 CSS/JS 加载过程中的背景和布局闪现 -->
     <style type="text/css">
         /* 基础样式，确保背景和布局优先加载 */
@@ -14,19 +14,20 @@
             padding: 0;
             overflow: hidden;
         }
-        
+
         /* 预加载背景，确保背景图先加载 */
         body {
-            background: url(../../img/background.jpg) no-repeat center center/cover fixed;
+            background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%);
+            background-attachment: fixed;
         }
-        
+
         /* 骨架屏样式 */
         .skeleton {
             background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
             background-size: 200% 100%;
             animation: skeleton-loading 1.5s infinite;
         }
-        
+
         @keyframes skeleton-loading {
             0% {
                 background-position: 200% 0;
@@ -35,7 +36,7 @@
                 background-position: -200% 0;
             }
         }
-        
+
         /* 主容器样式 */
         #app {
             opacity: 0;
@@ -44,11 +45,11 @@
             min-height: 100vh;
             transition: opacity 0.3s ease-out;
         }
-        
+
         body.login-ready #app {
             opacity: 1;
         }
-        
+
         /* 统一背景，使用 !important 防止被 login.css 覆盖导致闪现 */
         .login {
             display: flex !important;
@@ -57,10 +58,10 @@
             width: 100% !important;
             height: 100% !important;
             min-height: 100vh !important;
-            background: url(../../img/background.jpg) no-repeat center center/cover !important;
+            background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%) !important;
             background-attachment: fixed !important;
         }
-        
+
         .login form {
             box-sizing: border-box;
             min-height: 400px;
@@ -69,78 +70,52 @@
             justify-content: center !important;
             position: inherit;
         }
-        
+
         .login .logo, .login .title {
             box-sizing: border-box;
         }
-        
+
         .login .logo img {
             display: block;
         }
-        
+
         .login .title {
             text-align: center;
         }
-        
+
         .login .form-item {
             display: flex;
             align-items: center;
             flex-wrap: wrap;
             box-sizing: border-box;
         }
-        
+
         .login .form-item input, .login .form-label {
             box-sizing: border-box;
         }
-        
+
         .login .btn-submit {
             display: block;
             box-sizing: border-box;
         }
-        
+
         .login form p.txt {
             width: 100%;
             margin: 0;
             box-sizing: border-box;
         }
-        
-        .l-redio .layui-form-radio {
-            margin: 0;
-        }
-        
-        .l-redio .layui-form-radio>i {
-            font-size: 16px;
-            color: #DCDFE6;
-        }
-        
-        .l-redio .layui-form-radio>div {
-            font-size: 14px;
-            color: #000 !important;
-            font-weight: bold !important;
-        }
-        
-        .l-redio .layui-form-radioed>i {
-            font-size: 16px;
-            color: #1976d2;
-        }
-        
-        .l-redio .layui-form-radioed>div {
-            font-size: 14px;
-            color: #000 !important;
-            font-weight: bold !important;
-        }
-        
+
         /* 移除表单灰色/白底背景，保留输入框白底 */
         .login form.login-form {
             background: transparent !important;
         }
-        
+
         /* 页面切换过渡效果 */
         .page-transition-enter {
             opacity: 0;
             transform: translateY(20px);
         }
-        
+
         .page-transition-enter-active {
             opacity: 1;
             transform: translateY(0);
@@ -149,6 +124,7 @@
     </style>
     <!-- 优先加载关键CSS -->
     <link rel="stylesheet" type="text/css" href="../../layui/css/layui.css"/>
+    <link rel="stylesheet" type="text/css" href="../../xznstatic/css/chaoxing-login.css"/>
 </head>
 <body>
 <!-- 骨架屏 -->
@@ -194,47 +170,49 @@
 })();
 </script>
 <div id="app" class="login">
-    <form class="layui-form login-form"
-          :style='{"padding":"20px","boxShadow":"none","borderColor":"transparent","backgroundColor":"transparent","borderRadius":"20px","borderWidth":"0","width":"400px","borderStyle":"none","justifyContent":"center","height":"auto"}'>
-        <h1 class="logo" v-if="false"
-            :style='{"padding":"5px 0","boxShadow":"0 0 6px rgba(255,0,0,.8)","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#fff","borderRadius":"6px","borderWidth":"0","borderStyle":"solid"}'>
-            <img :style='{"boxShadow":"0 0 6px rgba(255,0,0,.8)","margin":"0 auto","borderColor":"rgba(0,0,0,.3)","borderRadius":"100%","borderWidth":"1px","width":"44px","borderStyle":"solid","height":"44px"}'
-                 src="http://codegen.caihongy.cn/20201024/ed5e326ca66f403aa3197b5fbb4ec733.jpg"></h1>
+    <div class="login-container">
+        <div class="login-header">
+            <div class="login-logo">
+                <i class="layui-icon layui-icon-app" style="font-size: 40px; color: white;"></i>
+            </div>
+            <h1 class="login-title">登录</h1>
+            <p class="login-subtitle">智能化学习系统</p>
+        </div>
 
-        <div class="msg-warn hide title" v-if="true"
-             :style='{"padding":"0 10px","boxShadow":"none","margin":"10px auto","borderColor":"transparent","backgroundColor":"transparent","color":"#1976d2","isshow":true,"borderRadius":"8px","borderWidth":"0","width":"auto","lineHeight":"32px","fontSize":"12px","borderStyle":"none"}'>
+        <form class="layui-form login-form" lay-filter="loginForm">
+            <input type="hidden" name="role" value="xuesheng">
+            
+            <div class="form-group">
+                <label>账号</label>
+                <div class="input-animation">
+                    <input type="text" name="username" required lay-verify="required" placeholder="请输入账号" autocomplete="off" class="layui-input">
+                </div>
+            </div>
 
-        </div>
-        <div :style='{"padding":"0","boxShadow":"none","margin":"0 auto","borderColor":"transparent","backgroundColor":"transparent","borderRadius":"20px","borderWidth":"0","width":"80%","borderStyle":"none","height":"64px"}'
-             class="form-item">
-            <label v-if="false"
-                   :style='{"padding":"0 10px","boxShadow":"0 0 6px rgba(255,0,0,0)","borderColor":"rgba(0,0,0,0)","backgroundColor":"transparent","color":"#333","borderRadius":"0","textAlign":"right","borderWidth":"0","width":"84px","fontSize":"16px","borderStyle":"solid"}'
-                   class="form-label">账号</label>
-            <input :style='{"padding":"0 10px","boxShadow":"0 0 6px rgba(0,0,0,.5)","borderColor":"#ccc","backgroundColor":"#fff","color":"#333","borderRadius":"8px","textAlign":"left","borderWidth":"0","width":"100%","fontSize":"14px","borderStyle":"solid","height":"44px"}'
-                   type="text" name="username" required lay-verify="required" placeholder="请输入账号"
-                   autocomplete="off" class="layui-input">
-        </div>
-        <div :style='{"padding":"0","boxShadow":"none","margin":"0 auto","borderColor":"transparent","backgroundColor":"transparent","borderRadius":"20px","borderWidth":"0","width":"80%","borderStyle":"none","height":"64px"}'
-             class="form-item">
-            <label v-if="false"
-                   :style='{"padding":"0 10px","boxShadow":"0 0 6px rgba(255,0,0,0)","borderColor":"rgba(0,0,0,0)","backgroundColor":"transparent","color":"#333","borderRadius":"0","textAlign":"right","borderWidth":"0","width":"84px","fontSize":"16px","borderStyle":"solid"}'
-                   class="form-label">密码</label>
-            <input :style='{"padding":"0 10px","boxShadow":"0 0 6px rgba(0,0,0,.5)","borderColor":"#ccc","backgroundColor":"#fff","color":"#333","borderRadius":"8px","textAlign":"left","borderWidth":"0","width":"100%","fontSize":"14px","borderStyle":"solid","height":"44px"}'
-                   type="password" name="password" required lay-verify="required" placeholder="请输入密码"
-                   autocomplete="off" class="layui-input">
-        </div>
-        <div :style='{"padding":"0","boxShadow":"none","margin":"0 auto","borderColor":"transparent","backgroundColor":"transparent","borderRadius":"10px","borderWidth":"0","width":"80%","borderStyle":"none","height":"44px"}'
-             class="form-item l-redio">
-            <input type="radio" name="role" id="role" value="xuesheng" title="学生" checked>
-        </div>
-        <button :style='{"padding":"0 10px","boxShadow":"0 0 0px rgba(255,0,0,.5)","margin":"10px auto","borderColor":"#1976d2","backgroundColor":"#1976d2","color":"#fff","borderRadius":"8px","borderWidth":"2px","width":"60%","fontSize":"14px","borderStyle":"solid","height":"44px"}'
-                class="layui-btn layui-btn-fluid layui-btn-danger btn-submit" lay-submit lay-filter="login">登录
-        </button>
-        <p :style='{"color":"#999","textAlign":"center","fontSize":"12px"}' class="txt"><a
-                style="color: inherit;font-size: inherit;"
-                href="javascript:registerClick('xuesheng')">注册学生</a>
-        </p>
-    </form>
+            <div class="form-group">
+                <label>密码</label>
+                <div class="input-animation">
+                    <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
+            <div class="role-selector">
+                <div class="role-option active" data-role="xuesheng">学生</div>
+                <div class="role-option" data-role="jiaoshi">教师</div>
+            </div>
+
+            <button type="submit" class="btn-login" lay-submit lay-filter="login">
+                <i class="layui-icon layui-icon-login-qq" style="margin-right: 8px;"></i>
+                登录
+            </button>
+
+            <div class="login-links">
+                <a href="javascript:registerClick('xuesheng')">注册学生账号</a>
+                <span style="margin: 0 10px;">|</span>
+                <a href="#">忘记密码</a>
+            </div>
+        </form>
+    </div>
 </div>
 
 <script src="../../layui/layui.js"></script>
@@ -271,7 +249,15 @@
         var layer = layui.layer;
         var form = layui.form;
         var http = layui.http;
-        var jquery = layui.jquery;
+        var $ = layui.jquery;
+
+        // 角色选择
+        $('.role-option').on('click', function() {
+            $('.role-option').removeClass('active');
+            $(this).addClass('active');
+            var role = $(this).data('role');
+            $('input[name="role"]').val(role);  // 设置隐藏字段的值
+        });
 
         // 登录
         form.on('submit(login)', function(data) {
@@ -304,7 +290,7 @@
                 });
                 // 登录凭证
                 localStorage.setItem('Token', res.token);
-                localStorage.setItem('role', jquery('#role:checked').attr('title'));
+                localStorage.setItem('role', data.role === 'xuesheng' ? '学生' : '教师');
                 // 当前登录用户角色
                 localStorage.setItem('userTable', data.role);
                 localStorage.setItem('sessionTable', data.role);

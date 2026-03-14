@@ -1,0 +1,400 @@
+/* 超星学习通风格首页样式 */
+:root {
+    --primary-color: #1976d2;
+    --primary-light: #42a5f5;
+    --primary-dark: #0d47a1;
+    --secondary-color: #ffffff;
+    --text-color: #333333;
+    --text-light: #666666;
+    --border-radius: 12px;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+    --header-height: 150px;
+}
+
+/* 基础重置 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%);
+    min-height: 100vh;
+    color: var(--text-color);
+}
+
+/* 顶部导航栏 */
+#header {
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: var(--shadow);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    transition: var(--transition);
+}
+
+#header .nav-top {
+    display: flex;
+    align-items: center;
+    padding: 0 40px;
+    height: var(--header-height);
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+    box-shadow: 0 4px 15px rgba(25, 118, 210, 0.2);
+}
+
+#header .nav-top-img {
+    width: 120px;
+    height: 40px;
+    margin-right: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+#header .nav-top-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+    margin-right: 20px;
+}
+
+#header .nav-top-tel {
+    font-size: 16px;
+    color: white;
+    padding: 0 20px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+#header .navs {
+    display: flex;
+    justify-content: center;
+    padding: 0 40px;
+    height: 60px;
+    background: var(--primary-color);
+    box-shadow: 0 2px 10px rgba(25, 118, 210, 0.3);
+}
+
+#header .navs li {
+    display: inline-block;
+    margin: 0 15px;
+    padding: 10px 20px;
+    color: white;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+#header .navs li::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+#header .navs li:hover::before {
+    left: 100%;
+}
+
+#header .navs li:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+#header .navs li.current {
+    background: white;
+    color: var(--primary-color);
+    box-shadow: 0 4px 15px rgba(25, 118, 210, 0.3);
+}
+
+#header .navs li.current::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--primary-color);
+}
+
+#header .navs li a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* 主内容区域 */
+#content {
+    margin-top: var(--header-height);
+    padding: 40px 0;
+    min-height: calc(100vh - var(--header-height));
+}
+
+/* 轮播图 */
+.banner {
+    position: relative;
+    height: 500px;
+    overflow: hidden;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 40px;
+}
+
+.banner .layui-carousel {
+    height: 100%;
+}
+
+.banner .layui-carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 内容卡片 */
+.recommend {
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 30px;
+    margin-bottom: 40px;
+    transition: var(--transition);
+}
+
+.recommend:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.recommend .title {
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.recommend .title span {
+    display: inline-block;
+    padding: 10px 30px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 30px;
+    font-size: 20px;
+    font-weight: bold;
+    position: relative;
+}
+
+.recommend .title span::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid var(--primary-color);
+}
+
+.recommend .list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.recommend .list-item {
+    flex: 1;
+    min-width: 300px;
+    background: white;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: var(--transition);
+}
+
+.recommend .list-item:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.recommend .list-item-body {
+    padding: 20px;
+    text-align: center;
+}
+
+.recommend .list-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: var(--border-radius);
+}
+
+.recommend .list-item .name {
+    margin-top: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+/* 按钮样式 */
+.btn-more {
+    display: block;
+    margin: 30px auto 0;
+    padding: 12px 40px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 4px 15px rgba(25, 118, 210, 0.3);
+}
+
+.btn-more:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(25, 118, 210, 0.4);
+}
+
+.btn-more::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn-more:hover::before {
+    left: 100%;
+}
+
+/* 底部信息栏 */
+#tabbar {
+    background: var(--primary-color);
+    color: white;
+    padding: 30px 0;
+    margin-top: 40px;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+#tabbar .company {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+#tabbar .record {
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+#tabbar .desc {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    font-size: 14px;
+}
+
+/* 动画效果 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.page-transition-enter {
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.page-transition-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* 骨架屏样式 */
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    #header .nav-top {
+        flex-direction: column;
+        height: auto;
+        padding: 20px;
+    }
+
+    #header .nav-top-img {
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+
+    #header .navs {
+        padding: 0 20px;
+    }
+
+    #header .navs li {
+        margin: 0 10px;
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+
+    #content {
+        margin-top: calc(var(--header-height) + 60px);
+    }
+
+    .recommend .list-item {
+        min-width: 100%;
+    }
+}
+
+/* 加载动画 */
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
