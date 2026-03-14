@@ -253,6 +253,20 @@
         var http = layui.http;
         var $ = layui.jquery;
 
+        // 自动填充账号密码（如果从注册页面传递了参数）
+        function autoFillCredentials() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const username = urlParams.get('username');
+            const password = urlParams.get('password');
+
+            if (username && password) {
+                $('input[name="username"]').val(decodeURIComponent(username));
+                $('input[name="password"]').val(decodeURIComponent(password));
+                // 自动选择教师角色（因为是从教师注册页面过来的）
+                $('.role-option[data-role="jiaoshi"]').click();
+            }
+        }
+
         // 角色选择
         $('.role-option').on('click', function() {
             $('.role-option').removeClass('active');
@@ -308,6 +322,11 @@
 
             });
             return false
+        });
+
+        // 页面加载完成后自动填充账号密码
+        $(document).ready(function() {
+            autoFillCredentials();
         });
 
     });
