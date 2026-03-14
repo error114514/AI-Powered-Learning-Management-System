@@ -10,14 +10,14 @@
     >
       <el-row>
                         <el-col :span="12">
-        <el-form-item class="input" v-if="type!='info'"  label="试卷名称" prop="name">
+        <el-form-item class="input" v-if="type!='info'"  label="作业名称" prop="name">
           <el-input v-model="ruleForm.name" 
-              placeholder="试卷名称" clearable  :readonly="ro.name"></el-input>
+              placeholder="作业名称" clearable  :readonly="ro.name"></el-input>
         </el-form-item>
         <div v-else>
-          <el-form-item class="input" label="试卷名称" prop="name">
+          <el-form-item class="input" label="作业名称" prop="name">
               <el-input v-model="ruleForm.name" 
-                placeholder="试卷名称" readonly></el-input>
+                placeholder="作业名称" readonly></el-input>
           </el-form-item>
         </div>
       </el-col>
@@ -147,7 +147,7 @@ export default {
                                                     statusOptions: [],
                     rules: {
                   name: [
-                            { required: true, message: '试卷名称不能为空', trigger: 'blur' },
+                            { required: true, message: '作业名称不能为空', trigger: 'blur' },
                                     	                                                              ],
                   time: [
                             { required: true, message: '作业时长(分钟)不能为空', trigger: 'blur' },

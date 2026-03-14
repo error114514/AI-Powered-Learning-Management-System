@@ -325,7 +325,7 @@ class exampaper(BaseModel):
 
     __authTables__={}
     addtime = models.DateTimeField(auto_now_add=False, verbose_name=u'创建时间')
-    name=models.CharField ( max_length=255,null=False, unique=False,verbose_name='试卷名称' )
+    name=models.CharField ( max_length=255,null=False, unique=False,verbose_name='作业名称' )
     time=models.IntegerField  ( null=False, unique=False,verbose_name='作业时长(分钟)' )
     status=models.IntegerField  ( null=False, unique=False,verbose_name='试卷状态' )
     '''
@@ -345,7 +345,7 @@ class examquestion(BaseModel):
     __authTables__={}
     addtime = models.DateTimeField(auto_now_add=False, verbose_name=u'创建时间')
     paperid=models.BigIntegerField  ( null=False, unique=False,verbose_name='所属试卷id（外键）' )
-    papername=models.CharField ( max_length=255,null=False, unique=False,verbose_name='试卷名称' )
+    papername=models.CharField ( max_length=255,null=False, unique=False,verbose_name='作业名称' )
     questionname=models.CharField ( max_length=255,null=False, unique=False,verbose_name='试题名称' )
     options=models.TextField   (  null=True, unique=False,verbose_name='选项，json字符串' )
     score=models.BigIntegerField  (  null=True, unique=False,verbose_name='分值' )
@@ -381,7 +381,7 @@ class examrecord(BaseModel):
     userid=models.BigIntegerField  ( null=False, unique=False,verbose_name='用户id' )
     username=models.CharField ( max_length=255, null=True, unique=False,verbose_name='用户名' )
     paperid=models.BigIntegerField  ( null=False, unique=False,verbose_name='试卷id（外键）' )
-    papername=models.CharField ( max_length=255,null=False, unique=False,verbose_name='试卷名称' )
+    papername=models.CharField ( max_length=255,null=False, unique=False,verbose_name='作业名称' )
     questionid=models.BigIntegerField  ( null=False, unique=False,verbose_name='试题id（外键）' )
     questionname=models.CharField ( max_length=255,null=False, unique=False,verbose_name='试题名称' )
     options=models.TextField   (  null=True, unique=False,verbose_name='选项，json字符串' )

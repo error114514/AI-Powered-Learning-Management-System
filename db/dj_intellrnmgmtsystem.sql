@@ -141,7 +141,7 @@ DROP TABLE IF EXISTS `exampaper`;
 CREATE TABLE `exampaper`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `addtime` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
-  `name` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT '试卷名称',
+  `name` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT '作业名称',
   `time` int(0) NOT NULL COMMENT '作业时长(分钟)',
   `status` int(0) NOT NULL DEFAULT 0 COMMENT '试卷状态',
   PRIMARY KEY (`id`) USING BTREE
@@ -161,7 +161,7 @@ CREATE TABLE `examquestion`  (
   `id` bigint(0) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `addtime` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `paperid` bigint(0) NOT NULL COMMENT '所属试卷id（外键）',
-  `papername` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT '试卷名称',
+  `papername` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT '作业名称',
   `questionname` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT '试题名称',
   `options` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL COMMENT '选项，json字符串',
   `score` bigint(0) NULL DEFAULT 0 COMMENT '分值',
@@ -190,7 +190,7 @@ CREATE TABLE `examrecord`  (
   `userid` bigint(0) NOT NULL COMMENT '用户id',
   `username` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL COMMENT '用户名',
   `paperid` bigint(0) NOT NULL COMMENT '试卷id（外键）',
-  `papername` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT '试卷名称',
+  `papername` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT '作业名称',
   `questionid` bigint(0) NOT NULL COMMENT '试题id（外键）',
   `questionname` varchar(200) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT '试题名称',
   `options` longtext CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL COMMENT '选项，json字符串',

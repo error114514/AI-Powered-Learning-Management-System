@@ -4,7 +4,7 @@
     <div v-if="!showFlag">
       <el-form :inline="true" :model="searchForm" class="form-content">
         <el-form-item label="试卷">
-          <el-input v-model="searchForm.papername" placeholder="试卷名称" clearable></el-input>
+          <el-input v-model="searchForm.papername" placeholder="作业名称" clearable></el-input>
         </el-form-item>
         <el-form-item>
           <el-button round @click="search()">查询</el-button>
