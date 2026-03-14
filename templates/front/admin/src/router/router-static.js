@@ -134,7 +134,7 @@ const routes = [{
       }
           ,{
 	path: '/examrecord',
-        name: '考试记录',
+        name: '作业记录',
         component: examrecord
       }
         ]

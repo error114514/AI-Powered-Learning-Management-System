@@ -148,7 +148,7 @@ def exampaper_page(request):
 
 
         # 判断当前表的表属性isAdmin,为真则是管理员表
-        # 当表属性isAdmin=”是”,刷出来的用户表也是管理员，即page和list可以查看所有人的考试记录(同时应用于其他表)
+        # 当表属性isAdmin=”是”,刷出来的用户表也是管理员，即page和list可以查看所有人的作业记录(同时应用于其他表)
         __isAdmin__ = None
 
         allModels = apps.get_app_config('main').get_models()
@@ -497,7 +497,7 @@ def exampaper_vote(request,id_):
 
 def exampaper_verify_face(request):
     '''
-    考试人脸验证接口
+    作业人脸验证接口
     Exam face verification endpoint
     '''
     if request.method == "OPTIONS":
@@ -542,21 +542,21 @@ def exampaper_verify_face(request):
             if recognized_user_id is None:
                 msg['code'] = crud_error_code
                 msg['msg'] = "未识别到人脸，请确保面部清晰可见"
-                logging.warning(f"考试验证：未识别到人脸，用户ID: {logged_in_user_id}")
+                logging.warning(f"作业验证：未识别到人脸，用户ID: {logged_in_user_id}")
                 return JsonResponse(msg)
             
             # 比较用户ID
             if recognized_user_id == logged_in_user_id:
                 msg['verified'] = True
                 msg['msg'] = "身份验证成功"
-                logging.info(f"考试验证成功，用户ID: {logged_in_user_id}")
+                logging.info(f"作业验证成功，用户ID: {logged_in_user_id}")
             else:
                 msg['code'] = crud_error_code
                 msg['msg'] = "人脸与当前登录用户不匹配"
-                logging.warning(f"考试验证失败：用户ID不匹配，登录用户: {logged_in_user_id}, 识别用户: {recognized_user_id}")
+                logging.warning(f"作业验证失败：用户ID不匹配，登录用户: {logged_in_user_id}, 识别用户: {recognized_user_id}")
                 
         except Exception as e:
-            logging.error(f"考试人脸验证失败: {str(e)}")
+            logging.error(f"作业人脸验证失败: {str(e)}")
             msg['code'] = crud_error_code
             msg['msg'] = f"验证失败: {str(e)}"
         

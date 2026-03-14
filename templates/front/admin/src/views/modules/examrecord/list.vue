@@ -31,7 +31,7 @@
             header-align="center"
             align="center"
             sortable
-            label="考试得分"
+            label="作业得分"
           >
             <template slot-scope="scope">
               <el-tag v-if="scope.row.myscore==0" type="info">{{scope.row.myscore}}</el-tag>

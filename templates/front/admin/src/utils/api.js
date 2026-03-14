@@ -1,5 +1,5 @@
 const api = {
-    // 考试记录
+    // 作业记录
     examrecordgroupby: 'examrecord/groupby',
     examrecordpage: 'examrecord/page',
     examrecordsave: 'examrecord/save',

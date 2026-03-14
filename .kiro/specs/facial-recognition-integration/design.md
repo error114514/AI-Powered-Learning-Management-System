@@ -655,7 +655,7 @@ methods: {
 <!-- Face verification dialog -->
 <el-dialog title="人脸验证" :visible.sync="showFaceVerification">
     <div class="face-verification">
-        <p>开始考试前需要进行人脸验证</p>
+        <p>开始作业前需要进行人脸验证</p>
         <input type="file" 
                accept="image/*" 
                @change="handleFaceCapture"

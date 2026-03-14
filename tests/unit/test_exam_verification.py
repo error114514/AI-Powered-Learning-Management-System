@@ -1,6 +1,6 @@
 # coding:utf-8
 """
-考试人脸验证的单元测试
+作业人脸验证的单元测试
 Unit tests for exam face verification
 """
 import unittest
@@ -14,7 +14,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../.
 
 
 class TestExamVerification(unittest.TestCase):
-    """考试人脸验证测试"""
+    """作业人脸验证测试"""
     
     def setUp(self):
         """测试前准备"""

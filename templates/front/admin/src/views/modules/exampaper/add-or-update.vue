@@ -22,14 +22,14 @@
         </div>
       </el-col>
                                     <el-col :span="12">
-        <el-form-item class="input" v-if="type!='info'"  label="考试时长(分钟)" prop="time">
+        <el-form-item class="input" v-if="type!='info'"  label="作业时长(分钟)" prop="time">
           <el-input v-model="ruleForm.time" 
-              placeholder="考试时长(分钟)" clearable  :readonly="ro.time"></el-input>
+              placeholder="作业时长(分钟)" clearable  :readonly="ro.time"></el-input>
         </el-form-item>
         <div v-else>
-          <el-form-item class="input" label="考试时长(分钟)" prop="time">
+          <el-form-item class="input" label="作业时长(分钟)" prop="time">
               <el-input v-model="ruleForm.time" 
-                placeholder="考试时长(分钟)" readonly></el-input>
+                placeholder="作业时长(分钟)" readonly></el-input>
           </el-form-item>
         </div>
       </el-col>
@@ -150,7 +150,7 @@ export default {
                             { required: true, message: '试卷名称不能为空', trigger: 'blur' },
                                     	                                                              ],
                   time: [
-                            { required: true, message: '考试时长(分钟)不能为空', trigger: 'blur' },
+                            { required: true, message: '作业时长(分钟)不能为空', trigger: 'blur' },
                                         { validator: validateIntNumber, trigger: 'blur' },
                         	                                                              ],
                   status: [

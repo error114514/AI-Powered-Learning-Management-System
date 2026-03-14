@@ -8,11 +8,11 @@
         <span class="tip-text">{{dataList.length}}</span> 道。
       </div>
       <div class="right-content">
-        考试剩余时间：
+        答题剩余时间：
         <span class="tip-text">{{SecondToDate}}</span>
       </div>
       <div class="right-content">
-        <el-button type="danger" round @click="leaveTap">结束考试</el-button>
+        <el-button type="danger" round @click="leaveTap">结束答题</el-button>
       </div>
     </div>
     <div class="detail-content" v-if="!isEndFlag">
@@ -93,13 +93,13 @@
     <div class="detail-content" v-if="isEndFlag">
       <div class="item-content">
         <span class="label">
-          考试成绩：
+          作业成绩：
           <span style="font-size:24px;font-weight:blod;color:red">{{this.score}}</span>
         </span>
         <span class="content">分</span>
       </div>
       <div class="item-content" style="color:#888888">
-        <el-button @click="finishTap" type="primary">结束考试</el-button>
+        <el-button @click="finishTap" type="primary">结束答题</el-button>
       </div>
     </div>
   </div>
@@ -127,7 +127,7 @@ export default {
       // 得分
       score: 0,
       user: {},
-      // 考试是否结束
+      // 作业是否结束
       isEndFlag: false
     };
   },
@@ -252,7 +252,7 @@ export default {
   },
   methods: {
     leaveTap() {
-      this.$confirm(`确定离开考试?未答题目按0分计算`, "提示", {
+      this.$confirm(`确定离开作业?未答题目按0分计算`, "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"

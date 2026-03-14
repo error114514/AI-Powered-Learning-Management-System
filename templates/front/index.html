@@ -768,8 +768,8 @@
 					<ul>
 						<li class='current'><a href="javascript:navPage('./pages/home/home.html')" class="menumain"><i v-if="false" class="layui-icon layui-icon-home"></i>首页</a></li>
 						<li v-for="(item,index) in indexNav" v-bind:key="index"><a :href="'javascript:navPage(\''+item.url+'\')'" class="menumain" style="cursor: pointer;"><i v-if="false" class="layui-icon" :class="iconArr[index]"></i>{{item.name}}</a></li>
-						<li><a href="javascript:navPage('./pages/exampaper/list.html')" class="menumain"><i v-if="false" class="layui-icon layui-icon-clipboard"></i>考试中心</a></li>
-<!--						<li><a href="javascript:navPage('./pages/exampaper/list.html')" class="menumain"><i v-if="false" class="layui-icon layui-icon-clipboard"></i>考试管理</a></li>-->
+						<li><a href="javascript:navPage('./pages/exampaper/list.html')" class="menumain"><i v-if="false" class="layui-icon layui-icon-clipboard"></i>作业中心</a></li>
+<!--						<li><a href="javascript:navPage('./pages/exampaper/list.html')" class="menumain"><i v-if="false" class="layui-icon layui-icon-clipboard"></i>作业管理</a></li>-->
 						<li><a href="javascript:navPage('./pages/ai/ai-chat.html')" class="menumain"><i v-if="false" class="layui-icon layui-icon-music"></i>AI问答</a></li>
 						<li><a href="javascript:centerPage();" class="menumain"><i v-if="false" class="layui-icon layui-icon-username"></i>个人中心</a></li>
 						<li v-if="userTable !== 'xuesheng'"><a :href="adminurl" target="_blank" class="menumain" style="cursor: pointer;"><i v-if="false" class="layui-icon layui-icon-link"></i>后台管理</a></li>

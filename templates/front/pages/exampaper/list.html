@@ -82,7 +82,7 @@
 				<p class="line"> 论坛中心 </p>
 			</div> -->
 			<div class="index-title" :style='{"padding":"10px","boxShadow":"0 0 0px rgba(255,0,0,.8)","margin":"10px auto","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#1976d2","color":"rgba(255, 255, 255, 1)","borderRadius":"4px","borderWidth":"0","fontSize":"30px","borderStyle":"solid","height":"auto"}'>
-			  <span>EXAM / PAPER</span><span>学习中心</span>
+			  <span>EXAM / PAPER</span><span>作业中心</span>
 			</div>
 			<!-- 标题 -->
 
@@ -90,8 +90,8 @@
 				<table class="layui-table" lay-skin="nob">
 					<thead>
 						<tr>
-							<th>试卷名称</th>
-							<th>考试时长</th>
+							<th>作业名称</th>
+							<th>限时完成</th>
 							<th>创建时间</th>
 							<th>操作</th>
 						</tr>
@@ -103,7 +103,7 @@
 							<td>{{item.addtime}}</td>
 							<td>
 								<button @click="exam(item.id)" type="button" class="layui-btn layui-btn-radius btn-theme">
-									<i class="layui-icon">&#xe679;</i> 考试
+									<i class="layui-icon">&#xe679;</i> 进入
 								</button>
 							</td>
 						</tr>
@@ -116,7 +116,7 @@
 			<div v-show="showFaceVerification" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 9999;">
 				<div style="background: white; padding: 30px; border-radius: 10px; width: 400px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
 					<h3 style="margin: 0 0 20px 0; text-align: center; color: #333;">人脸验证</h3>
-					<p style="margin-bottom: 20px; color: #666; text-align: center;">开始考试前需要进行人脸验证</p>
+					<p style="margin-bottom: 20px; color: #666; text-align: center;">开始作业前需要进行人脸验证</p>
 					<input type="file" id="faceInput" accept="image/*" style="display: none;">
 					<div style="text-align: center; margin-bottom: 20px;">
 						<button @click="selectFacePhoto" type="button" class="layui-btn" style="margin-right: 10px;">
@@ -150,7 +150,7 @@
 		<script src="../../js/utils.js"></script>
 
 		<script>
-			console.log('=== 考试列表页面JavaScript开始执行 ===');
+			console.log('=== 作业列表页面JavaScript开始执行 ===');
 			var vue = new Vue({
 				el: '#app',
 				data: {
@@ -181,7 +181,7 @@
 					jump(url) {
 						jump(url)
 					},
-					// 进入考试
+					// 进入作业
 					exam(id) {
 						// 检查用户是否已登录
 						var token = localStorage.getItem('Token');
@@ -191,7 +191,7 @@
 						console.log('UserID:', userid);
 						
 						if (!token || token === 'null' || token === '' || !userid) {
-							layui.layer.msg('请先登录后再参加考试', {time: 2000, icon: 5});
+							layui.layer.msg('请先登录后再参加作业', {time: 2000, icon: 5});
 							setTimeout(function() {
 								window.location.href = '../login.html';
 							}, 2000);

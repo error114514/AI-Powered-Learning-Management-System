@@ -59,7 +59,7 @@
             align="center"
             sortable
             width="170"
-            label="考试时间"
+            label="作业时间"
           ></el-table-column>
         </el-table>
         <el-pagination

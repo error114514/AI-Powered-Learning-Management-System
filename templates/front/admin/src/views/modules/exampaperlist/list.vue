@@ -25,7 +25,7 @@
             header-align="center"
             align="center"
             sortable
-            label="考试时长/分钟"
+            label="作业时长/分钟"
           >
             <template slot-scope="scope">{{scope.row.time}}</template>
           </el-table-column>
@@ -48,7 +48,7 @@
                 icon="el-icon-edit"
                 size="small"
                 @click="addOrUpdateHandler(scope.row.id)"
-              >考试</el-button>
+              >作业</el-button>
             </template>
           </el-table-column>
         </el-table>

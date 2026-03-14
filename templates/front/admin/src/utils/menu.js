@@ -34,7 +34,7 @@ const menu = {
                 tableName: "xuexitiandi",
               },
             ],
-            menu: "课程管理管理",
+            menu: "课程管理",
           },
           {
             child: [
@@ -81,7 +81,7 @@ const menu = {
                 tableName: "exampaperlist",
               },
             ],
-            menu: "考试管理",
+            menu: "作业管理",
           },
         ],
         frontMenu: [
@@ -148,7 +148,7 @@ const menu = {
                 tableName: "xuexitiandi",
               },
             ],
-            menu: "课程管理管理",
+            menu: "课程管理",
           },
           {
             child: [
@@ -201,9 +201,9 @@ const menu = {
           },
           {
             child: [
-              { buttons: ["查看"], menu: "考试记录", tableName: "examrecord" },
+              { buttons: ["查看"], menu: "作业记录", tableName: "examrecord" },
             ],
-            menu: "考试管理",
+            menu: "作业管理",
           },
         ],
         hasBackLogin: "是",
@@ -246,7 +246,7 @@ const menu = {
                 tableName: "xuexitiandi",
               },
             ],
-            menu: "课程管理管理",
+            menu: "课程管理",
           },
           {
             child: [
@@ -284,14 +284,14 @@ const menu = {
                 menu: "学习中心",
                 tableName: "exampaperlist",
               },
-              { buttons: ["查看"], menu: "考试记录", tableName: "examrecord" },
+              { buttons: ["查看"], menu: "作业记录", tableName: "examrecord" },
               {
                 buttons: ["查看"],
                 menu: "错题本",
                 tableName: "examfailrecord",
               },
             ],
-            menu: "考试管理",
+            menu: "作业管理",
           },
         ],
         frontMenu: [

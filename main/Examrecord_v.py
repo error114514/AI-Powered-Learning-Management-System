@@ -148,7 +148,7 @@ def examrecord_page(request):
 
 
         # 判断当前表的表属性isAdmin,为真则是管理员表
-        # 当表属性isAdmin=”是”,刷出来的用户表也是管理员，即page和list可以查看所有人的考试记录(同时应用于其他表)
+        # 当表属性isAdmin=”是”,刷出来的用户表也是管理员，即page和list可以查看所有人的作业记录(同时应用于其他表)
         __isAdmin__ = None
 
         allModels = apps.get_app_config('main').get_models()
@@ -494,7 +494,7 @@ def examrecord_vote(request,id_):
 
 def examrecord_groupby(request):
     '''
-    管理员用户：当表属性isAdmin=”是”,刷出来的用户表也是管理员，即page和list可以查看所有人的考试记录(同时应用于其他表)
+    管理员用户：当表属性isAdmin=”是”,刷出来的用户表也是管理员，即page和list可以查看所有人的作业记录(同时应用于其他表)
     '''
     if request.method == "OPTIONS":
         return JsonResponse({})

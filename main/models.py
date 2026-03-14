@@ -25,7 +25,7 @@ class jiaoshi(BaseModel):
     __browseClick__='否'#表属性[browseClick:是/否]，点击字段（clicknum），调用info/detail接口的时候后端自动+1）、投票功能（表属性[vote:是/否]，投票字段（votenum）,调用vote接口后端votenum+1
     __foreEndListAuth__='否'#前台列表权限foreEndListAuth[是/否]；当foreEndListAuth=是，刷的表新增用户字段userid，前台list列表接口仅能查看自己的记录和add接口后台赋值userid的值
     __foreEndList__='否'#表属性[foreEndList]前台list:和后台默认的list列表页相似,只是摆在前台,否:指没有此页,是:表示有此页(不需要登陆即可查看),前要登:表示有此页且需要登陆后才能查看
-    __isAdmin__='否'#表属性isAdmin=”是”,刷出来的用户表也是管理员，即page和list可以查看所有人的考试记录(同时应用于其他表)
+    __isAdmin__='否'#表属性isAdmin=”是”,刷出来的用户表也是管理员，即page和list可以查看所有人的作业记录(同时应用于其他表)
     addtime = models.DateTimeField(auto_now_add=False, verbose_name=u'创建时间')
     gonghao=models.CharField ( max_length=255,null=False,unique=True,verbose_name='工号' )
     mima=models.CharField ( max_length=255,null=False, unique=False,verbose_name='密码' )
@@ -67,7 +67,7 @@ class xuesheng(BaseModel):
     __browseClick__='否'#表属性[browseClick:是/否]，点击字段（clicknum），调用info/detail接口的时候后端自动+1）、投票功能（表属性[vote:是/否]，投票字段（votenum）,调用vote接口后端votenum+1
     __foreEndListAuth__='否'#前台列表权限foreEndListAuth[是/否]；当foreEndListAuth=是，刷的表新增用户字段userid，前台list列表接口仅能查看自己的记录和add接口后台赋值userid的值
     __foreEndList__='否'#表属性[foreEndList]前台list:和后台默认的list列表页相似,只是摆在前台,否:指没有此页,是:表示有此页(不需要登陆即可查看),前要登:表示有此页且需要登陆后才能查看
-    __isAdmin__='否'#表属性isAdmin=”是”,刷出来的用户表也是管理员，即page和list可以查看所有人的考试记录(同时应用于其他表)
+    __isAdmin__='否'#表属性isAdmin=”是”,刷出来的用户表也是管理员，即page和list可以查看所有人的作业记录(同时应用于其他表)
     addtime = models.DateTimeField(auto_now_add=False, verbose_name=u'创建时间')
     xuehao=models.CharField ( max_length=255,null=False,unique=True,verbose_name='学号' )
     mima=models.CharField ( max_length=255,null=False, unique=False,verbose_name='密码' )
@@ -107,7 +107,7 @@ class xuexitiandi(BaseModel):
     __browseClick__='否'#表属性[browseClick:是/否]，点击字段（clicknum），调用info/detail接口的时候后端自动+1）、投票功能（表属性[vote:是/否]，投票字段（votenum）,调用vote接口后端votenum+1
     __foreEndListAuth__='否'#前台列表权限foreEndListAuth[是/否]；当foreEndListAuth=是，刷的表新增用户字段userid，前台list列表接口仅能查看自己的记录和add接口后台赋值userid的值
     __foreEndList__='是'#表属性[foreEndList]前台list:和后台默认的list列表页相似,只是摆在前台,否:指没有此页,是:表示有此页(不需要登陆即可查看),前要登:表示有此页且需要登陆后才能查看
-    __isAdmin__='否'#表属性isAdmin=”是”,刷出来的用户表也是管理员，即page和list可以查看所有人的考试记录(同时应用于其他表)
+    __isAdmin__='否'#表属性isAdmin=”是”,刷出来的用户表也是管理员，即page和list可以查看所有人的作业记录(同时应用于其他表)
     addtime = models.DateTimeField(auto_now_add=False, verbose_name=u'创建时间')
     biaoti=models.CharField ( max_length=255, null=True, unique=False,verbose_name='标题' )
     fengmian=models.CharField ( max_length=255, null=True, unique=False,verbose_name='封面' )
@@ -141,7 +141,7 @@ class xuexiziliao(BaseModel):
     __browseClick__='否'#表属性[browseClick:是/否]，点击字段（clicknum），调用info/detail接口的时候后端自动+1）、投票功能（表属性[vote:是/否]，投票字段（votenum）,调用vote接口后端votenum+1
     __foreEndListAuth__='否'#前台列表权限foreEndListAuth[是/否]；当foreEndListAuth=是，刷的表新增用户字段userid，前台list列表接口仅能查看自己的记录和add接口后台赋值userid的值
     __foreEndList__='是'#表属性[foreEndList]前台list:和后台默认的list列表页相似,只是摆在前台,否:指没有此页,是:表示有此页(不需要登陆即可查看),前要登:表示有此页且需要登陆后才能查看
-    __isAdmin__='否'#表属性isAdmin=”是”,刷出来的用户表也是管理员，即page和list可以查看所有人的考试记录(同时应用于其他表)
+    __isAdmin__='否'#表属性isAdmin=”是”,刷出来的用户表也是管理员，即page和list可以查看所有人的作业记录(同时应用于其他表)
     addtime = models.DateTimeField(auto_now_add=False, verbose_name=u'创建时间')
     ziliaomingcheng=models.CharField ( max_length=255, null=True, unique=False,verbose_name='资料名称' )
     fengmian=models.CharField ( max_length=255, null=True, unique=False,verbose_name='封面' )
@@ -175,7 +175,7 @@ class shishengjiaoliu(BaseModel):
     __browseClick__='否'#表属性[browseClick:是/否]，点击字段（clicknum），调用info/detail接口的时候后端自动+1）、投票功能（表属性[vote:是/否]，投票字段（votenum）,调用vote接口后端votenum+1
     __foreEndListAuth__='否'#前台列表权限foreEndListAuth[是/否]；当foreEndListAuth=是，刷的表新增用户字段userid，前台list列表接口仅能查看自己的记录和add接口后台赋值userid的值
     __foreEndList__='否'#表属性[foreEndList]前台list:和后台默认的list列表页相似,只是摆在前台,否:指没有此页,是:表示有此页(不需要登陆即可查看),前要登:表示有此页且需要登陆后才能查看
-    __isAdmin__='否'#表属性isAdmin=”是”,刷出来的用户表也是管理员，即page和list可以查看所有人的考试记录(同时应用于其他表)
+    __isAdmin__='否'#表属性isAdmin=”是”,刷出来的用户表也是管理员，即page和list可以查看所有人的作业记录(同时应用于其他表)
     addtime = models.DateTimeField(auto_now_add=False, verbose_name=u'创建时间')
     xuehao=models.CharField ( max_length=255, null=True, unique=False,verbose_name='学号' )
     xingming=models.CharField ( max_length=255, null=True, unique=False,verbose_name='姓名' )
@@ -326,7 +326,7 @@ class exampaper(BaseModel):
     __authTables__={}
     addtime = models.DateTimeField(auto_now_add=False, verbose_name=u'创建时间')
     name=models.CharField ( max_length=255,null=False, unique=False,verbose_name='试卷名称' )
-    time=models.IntegerField  ( null=False, unique=False,verbose_name='考试时长(分钟)' )
+    time=models.IntegerField  ( null=False, unique=False,verbose_name='作业时长(分钟)' )
     status=models.IntegerField  ( null=False, unique=False,verbose_name='试卷状态' )
     '''
     name=VARCHAR
@@ -406,7 +406,7 @@ class examrecord(BaseModel):
     '''
     class Meta:
         db_table = 'examrecord'
-        verbose_name = verbose_name_plural = '考试记录表'
+        verbose_name = verbose_name_plural = '作业记录表'
 class storeup(BaseModel):
     __doc__ = u'''storeup'''
     __tablename__ = 'storeup'

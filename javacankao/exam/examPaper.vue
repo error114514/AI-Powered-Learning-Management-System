@@ -146,7 +146,7 @@ export default {
             
             // 人脸识别相关变量
             faceRecognitionDialogVisible: false, // 人脸识别弹窗显示状态
-            currentExamPaperId: null, // 当前要考试的试卷ID
+            currentExamPaperId: null, // 当前要作业的试卷ID
             previewUrl: '', // 人脸照片预览URL
             uploadStatus: '', // 上传状态提示
             recognitionResult: '', // 识别结果
@@ -210,7 +210,7 @@ export default {
             });
         },
         
-        // 点击开始考试 - 先弹出人脸识别验证
+        // 点击开始作业 - 先弹出人脸识别验证
         handleExam(id) {
             // 重置人脸识别状态
             this.resetFaceRecognitionState();
@@ -318,7 +318,7 @@ export default {
             this.$message.info('Face recognition verification cancelled');
         },
         
-        // 验证通过后确认开始考试
+        // 验证通过后确认开始作业
         confirmExamAfterVerification() {
             if (!this.faceRecognitionPassed) {
                 this.$message.error('Please complete face recognition verification first!');
@@ -328,7 +328,7 @@ export default {
             // 关闭人脸识别弹窗
             this.faceRecognitionDialogVisible = false;
             
-            // 显示考试确认弹窗
+            // 显示作业确认弹窗
             this.$confirm(
                 'Are you sure to start the exam? The timer will start once the exam begins, and you can only take it once.', 
                 'Start Exam', 
@@ -338,7 +338,7 @@ export default {
                     type: 'warning'
                 }
             ).then(() => {
-                // 跳转到考试页面
+                // 跳转到作业页面
                 this.$router.push({ path: `/exam?exampaperId=${this.currentExamPaperId}` });
             }).catch(() => {
                 this.$message.info('Exam cancelled');
