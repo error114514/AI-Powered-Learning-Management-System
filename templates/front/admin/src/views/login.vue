@@ -31,8 +31,8 @@
           </el-form-item>
           <el-button type="primary" @click="login()" class="loginInBt" style="padding:0;font-size:16px;border-radius:4px;height:44px;line-height:44px;width:100%;backgroundColor:rgba(255, 216, 103, 0.64); borderColor:rgba(255, 216, 103, 0.64); color:rgba(255, 255, 255, 1)">{{'1' == '1' ? '登录' : 'login'}}</el-button>
           <el-form-item class="setting">
-                                    <div style="color:rgba(255, 255, 255, 1)" class="register" @click="register('jiaoshi')">注册教师</div>
-                                                                                                                                                                                                                                                                                                                                                                                    <!-- <div style="color:rgba(255, 255, 255, 1)" class="reset">修改密码</div> -->
+            <div style="color:rgba(255, 255, 255, 1)" class="register" @click="register('jiaoshi')">注册教师</div>
+            <!-- <div style="color:rgba(255, 255, 255, 1)" class="reset">修改密码</div> -->
           </el-form-item>
         </el-form>
       </div>
@@ -335,16 +335,19 @@ export default {
       font-size: 14px;
       color: #999;
       margin: 0 !important;
+      text-align: center;
 
       .register {
-        float: left;
-        width: 50%;
+        float: none;
+        display: inline-block;
+        width: auto;
       }
 
       .reset {
-        float: right;
-        width: 50%;
-        text-align: right;
+        float: none;
+        display: inline-block;
+        width: auto;
+        text-align: center;
       }
     }
   }
@@ -383,13 +386,36 @@ export default {
     }
   }
 
-  .role {
+    .role {
     ::v-deep .el-form-item__label {
       width: 56px !important;
+      line-height: 40px;
+      height: 40px;
     }
 
     ::v-deep .el-radio {
-      margin-right: 12px;
+      margin-right: 20px;
+      margin-left: 20px;
+      display: inline-block;
+      text-align: center;
+      line-height: 40px;
+    }
+
+    ::v-deep .el-form-item__content {
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      line-height: 40px;
+      padding-left: 10px;
+    }
+
+    ::v-deep .el-radio__label {
+      line-height: 40px;
+    }
+
+    ::v-deep .el-radio__input {
+      line-height: 40px;
     }
   }
 
