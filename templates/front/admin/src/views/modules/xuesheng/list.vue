@@ -82,14 +82,6 @@
                     header-align="center"
 		    label="学号">
 		     <template slot-scope="scope">
-                       {{scope.row.xuehao}}
-                     </template>
-                </el-table-column>
-                	                	                                    <el-table-column  :sortable="contents.tableSortable" :align="contents.tableAlign"
-                    prop="mima"
-                    header-align="center"
-		    label="密码">
-		     <template slot-scope="scope">
                        {{scope.row.mima}}
                      </template>
                 </el-table-column>

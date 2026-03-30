@@ -6,7 +6,7 @@ const menu = {
           {
             child: [
               {
-                buttons: ["修改", "查看", "删除"],
+                buttons: ["查看"],
                 menu: "教师",
                 menuJump: "列表",
                 tableName: "jiaoshi",
@@ -17,7 +17,7 @@ const menu = {
           {
             child: [
               {
-                buttons: ["删除", "修改", "查看"],
+                buttons: ["查看"],
                 menu: "学生",
                 menuJump: "列表",
                 tableName: "xuesheng",
@@ -121,17 +121,6 @@ const menu = {
             child: [
               {
                 buttons: ["查看"],
-                menu: "教师",
-                menuJump: "列表",
-                tableName: "jiaoshi",
-              },
-            ],
-            menu: "教师管理",
-          },
-          {
-            child: [
-              {
-                buttons: ["查看", "修改"],
                 menu: "学生",
                 menuJump: "列表",
                 tableName: "xuesheng",
