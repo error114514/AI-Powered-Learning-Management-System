@@ -814,10 +814,10 @@ window.addEventListener('load', function() {
 
     <div id="content">
         <div class="recommend index-pv2"
-             :style='{"padding":"10px 0 10px 0","boxShadow":"0 0 0px rgba(255,0,0,.8)","margin":"0px 0 0 0","borderColor":"rgba(255, 255, 255, 0.3)","backgroundColor":"rgba(235, 235, 235, 1)","borderRadius":"0","borderWidth":"0","borderStyle":"solid"}'>
+             :style='{"padding":"10px 0 10px 0","boxShadow":"0 0 0px rgba(255,0,0,.8)","margin":"0px 0 0 0","borderColor":"rgba(255, 255, 255, 0.3)","backgroundColor":"rgba(247, 242, 235, 1)","borderRadius":"0","borderWidth":"0","borderStyle":"solid"}'>
             <div class="box" style='width:85%'>
                 <div class="title"
-                     :style='{"padding":"10px 0  20px 0","boxShadow":"0 0 0px rgba(255,0,0,.8)","margin":"10px 0 20px 0","borderColor":"rgba(0,0,0,1)","backgroundColor":"rgba(235, 235, 235, 1)","color":"rgba(0, 0, 0, 1)","borderRadius":"32px","alignItems":"center","borderWidth":"0 0px","fontSize":"35px","borderStyle":"solid"}'>
+                     :style='{"isshow":true,"padding":"15px 30px","boxShadow":"0 4px 15px rgba(25, 118, 210, 0.3)","margin":"20px auto","borderColor":"rgba(25, 118, 210, 1)","backgroundColor":"linear-gradient(135deg, #667eea 0%, #764ba2 100%)","color":"#fff","borderRadius":"50px","alignItems":"center","borderWidth":"2px","fontSize":"35px","borderStyle":"solid","textAlign":"center","fontWeight":"bold","letterSpacing":"2px","textShadow":"2px 2px 4px rgba(0,0,0,0.3)"}'>
                     <span>HOME NEWS</span><span>网站公告</span>
                 </div>
                 <div class="list">
@@ -840,7 +840,7 @@ window.addEventListener('load', function() {
                             :style='{"padding":"0 100px","boxShadow":"0px 0px 0px rgba(104, 103, 103, 1)","margin":"4px auto","borderColor":"rgba(255, 255, 255, 1)","backgroundColor":"#1976d2","color":"rgba(255, 255, 255, 1)","borderRadius":"6px","borderWidth":"0","width":"auto","fontSize":"14px","borderStyle":"solid","height":"34px"}'>
                         查看更多<i v-if="true"
                                    :style='{"isshow":true,"padding":"0 0 0 1px","fontSize":"14px","color":"rgba(255, 255, 255, 1)"}'
-                                   class="layui-icon layui-icon-next"></i></el-button>
+                                   class="layui-icon layui-icon-next"></i></button>
                 </div>
             </div>
         </div>
@@ -851,8 +851,8 @@ window.addEventListener('load', function() {
              :style='{"padding":"10px 0 10px 0","boxShadow":"0 0 0px rgba(255,0,0,.8)","margin":"0px 0 0 0","borderColor":"rgba(255, 255, 255, 0.3)","backgroundColor":"rgba(247, 242, 238, 1)","borderRadius":"0","borderWidth":"0","borderStyle":"solid"}'>
             <div class="box" style='width:85%'>
                 <div class="title"
-                     :style='{"isshow":true,"padding":"10px 0 10px 0","boxShadow":"0 0 0px rgba(255,0,0,.8)","margin":"10px 0 10px 0","borderColor":"rgba(0,0,0,1)","backgroundColor":"rgba(247, 242, 238, 1)","color":"rgba(0, 0, 0, 1)","borderRadius":"32px","alignItems":"center","borderWidth":"0 0px","fontSize":"35px","borderStyle":"solid"}'>
-                    <span>DATA SHOW</span><span>课程管理展示</span>
+                     :style='{"isshow":true,"padding":"15px 30px","boxShadow":"0 4px 15px rgba(25, 118, 210, 0.3)","margin":"20px auto","borderColor":"rgba(25, 118, 210, 1)","backgroundColor":"linear-gradient(135deg, #667eea 0%, #764ba2 100%)","color":"#fff","borderRadius":"50px","alignItems":"center","borderWidth":"2px","fontSize":"35px","borderStyle":"solid","textAlign":"center","fontWeight":"bold","letterSpacing":"2px","textShadow":"2px 2px 4px rgba(0,0,0,0.3)"}'>
+                    <span>CLASSES SHOW</span><span>课程展示</span>
                 </div>
                 <div class="list">
                     <div v-for="(item,index) in xuexitiandiList" :key="index"
@@ -876,7 +876,7 @@ window.addEventListener('load', function() {
                             :style='{"padding":"0 100px","boxShadow":"0px 0px 0px rgba(104, 103, 103, 1)","margin":"4px auto","borderColor":"rgba(255, 255, 255, 1)","backgroundColor":"#1976d2","color":"rgba(255, 255, 255, 1)","borderRadius":"6px","borderWidth":"0","width":"auto","fontSize":"14px","borderStyle":"solid","height":"34px"}'>
                         查看更多<i v-if="true"
                                    :style='{"isshow":true,"padding":"0 0 0 1px","fontSize":"14px","color":"rgba(255, 255, 255, 1)"}'
-                                   class="layui-icon layui-icon-next"></i></el-button>
+                                   class="layui-icon layui-icon-next"></i></button>
                 </div>
             </div>
         </div>
@@ -885,8 +885,8 @@ window.addEventListener('load', function() {
              :style='{"padding":"10px 0 10px 0","boxShadow":"0 0 0px rgba(255,0,0,.8)","margin":"0px 0 0 0","borderColor":"rgba(255, 255, 255, 0.3)","backgroundColor":"rgba(247, 242, 238, 1)","borderRadius":"0","borderWidth":"0","borderStyle":"solid"}'>
             <div class="box" style='width:85%'>
                 <div class="title"
-                     :style='{"isshow":true,"padding":"10px 0 10px 0","boxShadow":"0 0 0px rgba(255,0,0,.8)","margin":"10px 0 10px 0","borderColor":"rgba(0,0,0,1)","backgroundColor":"rgba(247, 242, 238, 1)","color":"rgba(0, 0, 0, 1)","borderRadius":"32px","alignItems":"center","borderWidth":"0 0px","fontSize":"35px","borderStyle":"solid"}'>
-                    <span>DATA SHOW</span><span>学习资料展示</span>
+                     :style='{"isshow":true,"padding":"15px 30px","boxShadow":"0 4px 15px rgba(25, 118, 210, 0.3)","margin":"20px auto","borderColor":"rgba(25, 118, 210, 1)","backgroundColor":"linear-gradient(135deg, #667eea 0%, #764ba2 100%)","color":"#fff","borderRadius":"50px","alignItems":"center","borderWidth":"2px","fontSize":"35px","borderStyle":"solid","textAlign":"center","fontWeight":"bold","letterSpacing":"2px","textShadow":"2px 2px 4px rgba(0,0,0,0.3)"}'>
+                    <span>STUDY MATERIALS SHOW</span><span>学习资料展示</span>
                 </div>
                 <div class="list">
                     <div v-for="(item,index) in xuexiziliaoList" :key="index"
@@ -910,7 +910,7 @@ window.addEventListener('load', function() {
                             :style='{"padding":"0 100px","boxShadow":"0px 0px 0px rgba(104, 103, 103, 1)","margin":"4px auto","borderColor":"rgba(255, 255, 255, 1)","backgroundColor":"#1976d2","color":"rgba(255, 255, 255, 1)","borderRadius":"6px","borderWidth":"0","width":"auto","fontSize":"14px","borderStyle":"solid","height":"34px"}'>
                         查看更多<i v-if="true"
                                    :style='{"isshow":true,"padding":"0 0 0 1px","fontSize":"14px","color":"rgba(255, 255, 255, 1)"}'
-                                   class="layui-icon layui-icon-next"></i></el-button>
+                                   class="layui-icon layui-icon-next"></i></button>
                 </div>
             </div>
         </div>

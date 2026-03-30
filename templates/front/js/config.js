@@ -1,5 +1,5 @@
 
-var projectName = '智能化学习管理系统';
+var projectName = '智能化学习系统';
 /**
  * 轮播图配置
  */
