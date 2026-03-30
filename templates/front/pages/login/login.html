@@ -139,8 +139,10 @@
     </form>
 </div>
 
-<script>
-(function(){
+<script>(function(){
+  // 立即执行，在 DOM 解析前就运行
+  document.documentElement.style.overflow = 'hidden';
+
   function showPage() {
     // 隐藏骨架屏
     var skeleton = document.getElementById('skeleton');
@@ -149,23 +151,24 @@
         skeleton.style.opacity = '0';
         setTimeout(function() {
             skeleton.remove();
+            document.documentElement.style.overflow = '';
         }, 300);
     }
     // 显示页面
     document.body.classList.add('login-ready');
   }
-  
+
   // 监听所有资源加载完成
   if (document.readyState === 'complete') {
     showPage();
   } else {
     window.addEventListener('load', function() {
       // 延迟一点时间，确保所有资源都已就绪
-      setTimeout(showPage, 200);
+      setTimeout(showPage, 100);
     });
-    
+
     // 安全保障，即使某些资源加载失败也能显示页面
-    setTimeout(showPage, 3000);
+    setTimeout(showPage, 2000);
   }
 })();
 </script>
