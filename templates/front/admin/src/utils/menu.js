@@ -176,11 +176,11 @@ const menu = {
             child: [
               {
                 buttons: ["新增", "查看", "修改", "删除"],
-                menu: "试卷管理",
+                menu: "作业管理",
                 tableName: "exampaper",
               },
             ],
-            menu: "试卷管理",
+            menu: "作业管理",
           },
           {
             child: [

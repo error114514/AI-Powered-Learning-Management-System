@@ -94,7 +94,7 @@ const routes = [{
       }
           ,{
 	path: '/exampaper',
-        name: '试卷管理',
+        name: '作业管理',
         component: exampaper
       }
           ,{
