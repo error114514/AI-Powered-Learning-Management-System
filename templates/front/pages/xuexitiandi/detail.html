@@ -1,4 +1,3 @@
-
 <!-- 首页 -->
 <!DOCTYPE html>
 <html>
@@ -66,7 +65,7 @@
     .data-detail {
       padding-bottom: 20px;
     }
-    
+
     .data-detail .layui-breadcrumb a.first {
       color: rgba(0, 0, 0, 1) !important;
     }
@@ -81,14 +80,17 @@
 						<a class="first" :style='{"padding":"8px 10px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0 5px","borderColor":"rgba(255,0,0,.3)","backgroundColor":"#fff","color":"rgba(0, 0, 0, 1)","borderRadius":"10px","borderWidth":"0","fontSize":"16px","borderStyle":"solid"}' href="../home/home.html">首页</a>
 						<a><cite :style='{"padding":"8px 15px","boxShadow":"0 0 6px rgba(255,0,0,.3)","margin":"0 15px","backgroundColor":"#fff","color":"#1976d2","borderRadius":"10px","borderWidth":"0","fontSize":"16px","borderStyle":"solid"}'>{{title}}</cite></a>
 					</span>
-					
+
 					                    <a :style='{"padding":"0 12px","boxShadow":"0 0 6px rgba(255,0,0,.3)","backgroundColor":"#fff","color":"rgba(0, 0, 0, 1)","borderRadius":"4px","borderWidth":"0","fontSize":"16px","lineHeight":"34px","borderStyle":"solid"}' @click="storeUp()" href="javascript:void(0)">
 						<i class="layui-icon" style="font-size: 20px;color: red;" v-if='true' :style='{"color":"red","padding":"0 2px 0 0","fontSize":"18px"}'>&#xe67a;</i>点我收藏
 					</a>
 					<a :style='{"padding":"0 12px","boxShadow":"0 0 6px rgba(103, 194, 58, 1)","margin":"0 0 0 10px","backgroundColor":"rgba(103, 194, 58, 1)","color":"#fff","borderRadius":"4px","borderWidth":"0","fontSize":"16px","lineHeight":"34px","borderStyle":"solid"}' @click="showAttendanceDialog = true" href="javascript:void(0)">
 						<i class="layui-icon" style="font-size: 20px;" v-if='true' :style='{"padding":"0 2px 0 0","fontSize":"18px"}'>&#xe67c;</i>人脸识别考勤
 					</a>
-                    					
+					<a :style='{"padding":"0 12px","boxShadow":"0 0 6px rgba(0, 123, 255, 1)","margin":"0 0 0 10px","backgroundColor":"rgba(0, 123, 255, 1)","color":"#fff","borderRadius":"4px","borderWidth":"0","fontSize":"16px","lineHeight":"34px","borderStyle":"solid"}' @click="showNormalAttendanceDialog = true" href="javascript:void(0)">
+						<i class="layui-icon" style="font-size: 20px;" v-if='true' :style='{"padding":"0 2px 0 0","fontSize":"18px"}'>&#xe6b2;</i>正常考勤
+					</a>
+
 				</div>
 				<div class="layui-row" style="display: flex">
 					<div class="layui-col-md5" style="width:400px">
@@ -107,7 +109,7 @@
 						  </div>
 						</div>
 
-						
+
                                                 <div class="tool-container">
 							<div @click="thumbsupnumClick()" style="display: flex;align-items: center;">
 								<i class="layui-icon" style="font-size: 20px;color: red;margin-right: 10px;">&#xe6af;</i>
@@ -118,57 +120,50 @@
 								踩一下({{detail.crazilynum}})
 							</div>
 						</div>
-                                                
+
 					</div>
 					<div class="layui-col-md7" style="padding-left: 20px;flex: 1;" :style='{"padding":"0","boxShadow":"0 6px 6px #1976d2","margin":"0 0 0 20px","backgroundColor":"#fff","borderRadius":"0px","borderWidth":"0px","borderStyle":"solid"}'>
 						<h1 style="position: relative;" :style='{"padding":"10px 15px","boxShadow":"0 0 0px rgba(255,0,0,.3)","borderColor":"rgba(0,0,0,.3)","backgroundColor":"rgba(89, 80, 80, 1)","color":"rgba(255, 255, 255, 1)","borderRadius":"0","textAlign":"center","borderWidth":"0","fontSize":"16px","borderStyle":"solid"}' class="title">{{title}}</h1>
-						
-						
 
-						
-																																																																																																																								
 
-						
+
+
 																																										<div :style='{"padding":"6px 15px","boxShadow":"0 0 6px rgba(255,0,0,0)","margin":"0","borderColor":"rgba(0, 0, 0, 0.3)","backgroundColor":"#fff","borderRadius":"0","borderWidth":"0 0 1px 0","borderStyle":"dashed"}' class="detail-item">
 							<span :style='{"padding":"0 12px 0 0","minWidth":"94px","fontSize":"14px","color":"rgba(0, 0, 0, 1)","textAlign":"center"}'>知识要点：</span>
 							<span class="desc">
 								<a style="display:block;" :style='{"padding":"0 15px","boxShadow":"0 0 6px #1976d2","borderColor":"rgba(0,0,0,.3)","backgroundColor":"#1976d2","color":"#fff","textAlign":"left","borderRadius":"4px","borderWidth":"0","width":"auto","lineHeight":"34px","fontSize":"14px","borderStyle":"solid","height":"35px"}' download="zhishiyaodian" :href="detail.zhishiyaodian">点击下载</a>
 							</span>
 						</div>
-																																																						
 
-											</div>
+
+					</div>
 				</div>
 
-				
+
 																																				<div class="video-container">
 					<video :style='{"width":"100%","margin":"20px auto","borderRadius":"20px","display":"block"}' style="width: 100%;" :src="detail.xuexishipin" controls="controls">
 						您的浏览器不支持视频播放
 					</video>
 				</div>
-																												
 
 				<div class="layui-row detail-tab">
 					<div class="layui-tab layui-tab-card" :style='{"boxShadow":"0 0 0px rgba(255,0,0,.3)","borderColor":"#1976d2","backgroundColor":"#fff","borderRadius":"10px","borderStyle":"solid","borderWidth":"1px"}' style="overflow: hidden;">
 
 						<ul class="layui-tab-title" :style='{"color":"rgba(255, 255, 255, 1)","backgroundColor":"#1976d2","fontSize":"14px"}'>
-							
-																																																																																																									
 
-							
+
+
 														<li>评论</li>
-														
 
-							
-														
+
+
 
 						</ul>
 
 						<div class="layui-tab-content">
-							
-																																																																																																									
 
-							
+
+
 														<div class="layui-tab-item">
 								<div class="message-container">
 									<form class="layui-form message-form" :style='{"padding":"20px","boxShadow":"1px 0 6px #1976d2","margin":"0 0 20px 0","borderColor":"#1976d2","backgroundColor":"#fff","borderRadius":"4px","borderWidth":"2px","borderStyle":"solid"}'>
@@ -206,10 +201,9 @@
 									<div class="pager" id="pager"></div>
 								</div>
 							</div>
-														
 
-							
-														
+
+
 
 						</div>
 					</div>
@@ -235,6 +229,24 @@
 					</div>
 					<div style="text-align: center; margin-top: 20px;">
 						<button @click="showAttendanceDialog = false" type="button" class="layui-btn layui-btn-primary">
+							取消
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- Normal Attendance Dialog -->
+			<div v-show="showNormalAttendanceDialog" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 9999;">
+				<div style="background: white; padding: 30px; border-radius: 10px; width: 400px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+					<h3 style="margin: 0 0 20px 0; text-align: center; color: #333;">正常考勤打卡</h3>
+					<p style="margin-bottom: 20px; color: #666; text-align: center;">点击按钮完成考勤打卡</p>
+					<div style="text-align: center; margin-bottom: 20px;">
+						<button @click="checkInNormalAttendance" type="button" class="layui-btn layui-btn-normal" :disabled="checkingIn">
+							<i class="layui-icon">&#xe605;</i> {{ checkingIn ? '打卡中...' : '打卡签到' }}
+						</button>
+					</div>
+					<div style="text-align: center; margin-top: 20px;">
+						<button @click="showNormalAttendanceDialog = false" type="button" class="layui-btn layui-btn-primary">
 							取消
 						</button>
 					</div>
@@ -276,6 +288,7 @@
 					numberList: [],
 					// 考勤相关
 					showAttendanceDialog: false,
+					showNormalAttendanceDialog: false,
 					attendanceFace: null,
 					attendancePreviewUrl: '',
 					checkingIn: false
@@ -370,7 +383,7 @@
 							}, 1000);
 						}
 					},
-					
+
                                         // 赞
 					thumbsupnumClick() {
 						this.detail.thumbsupnum = parseInt(this.detail.thumbsupnum) + 1
@@ -384,8 +397,8 @@
 						layui.http.requestJson(`${this.detailTable}/update`, 'post', this.detail, function(res) {
 							console.log(res);
 						})
-					},
                     					// 下载文件
+					},
 					downFile(url) {
 						var download = $("#download");
 						download.append(
@@ -400,9 +413,9 @@
 						jump(`../${acrossTable}/add.html?corss=true`);
 					},
 
-					
-					
-					
+
+
+
 					                    // 收藏商品
 					storeUp() {
 						layui.http.requestJson('storeup/save', 'post', {
@@ -435,15 +448,15 @@
 							layui.layer.msg('请先选择照片', {time: 2000, icon: 5});
 							return;
 						}
-						
+
 						var token = localStorage.getItem('Token');
 						var userid = localStorage.getItem('userid');
-						
+
 						console.log('=== 开始考勤打卡 ===');
 						console.log('Token:', token);
 						console.log('UserID:', userid);
 						console.log('文件:', this.attendanceFace.name, this.attendanceFace.size);
-						
+
 						if (!token || token === 'null' || token === '') {
 							layui.layer.msg('登录已过期，请重新登录', {time: 2000, icon: 5});
 							setTimeout(function() {
@@ -451,15 +464,15 @@
 							}, 2000);
 							return;
 						}
-						
+
 						this.checkingIn = true;
 						var formData = new FormData();
 						formData.append('file', this.attendanceFace);
-						
+
 						var that = this;
 						var url = layui.http.baseurl + 'file/upload2';
 						console.log('=== 请求URL:', url);
-						
+
 						layui.jquery.ajax({
 							url: url,
 							type: 'POST',
@@ -492,7 +505,7 @@
 								console.error('Error:', error);
 								console.error('Response:', xhr.responseText);
 								that.checkingIn = false;
-								
+
 								try {
 									var res = JSON.parse(xhr.responseText);
 									layui.layer.msg(res.msg || '打卡失败，请重试', {time: 2000, icon: 5});
@@ -501,13 +514,40 @@
 								}
 							}
 						});
+					},
+					// 正常考勤打卡
+					checkInNormalAttendance() {
+						var token = localStorage.getItem('Token');
+						var userid = localStorage.getItem('userid');
+
+						console.log('=== 开始正常考勤打卡 ===');
+						console.log('Token:', token);
+						console.log('UserID:', userid);
+
+						if (!token || token === 'null' || token === '') {
+							layui.layer.msg('登录已过期，请重新登录', {time: 2000, icon: 5});
+							setTimeout(function() {
+								window.location.href = '../login.html';
+							}, 2000);
+							return;
+						}
+
+						this.checkingIn = true;
+
+						// 模拟考勤请求
+						setTimeout(() => {
+							this.checkingIn = false;
+							layui.layer.msg('考勤打卡成功', {time: 2000, icon: 6});
+							this.showNormalAttendanceDialog = false;
+							// TODO: Call attendance recording API when implemented
+						}, 1000);
 					}
-                    
-					
+
+
 				}
 			})
-			
-			
+
+
 			layui.use(['layer', 'form', 'element', 'carousel', 'http', 'jquery', 'laypage'], function() {
 				var layer = layui.layer;
 				var element = layui.element;
@@ -583,8 +623,8 @@
 					// 	indicator: swiper.indicator
 					// });
 
-					
-					
+
+
 				});
 
 								// 获取评论
@@ -630,7 +670,7 @@
 					});
 					return false
 				});
-				
+
 			});
 		</script>
 	</body>
