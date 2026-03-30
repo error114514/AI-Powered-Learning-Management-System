@@ -76,6 +76,10 @@ def jiaoshi_register(request):
         # 将文件路径添加到req_dict (保存到zhaopian字段)
         req_dict['zhaopian'] = f"upload/{filename}"
 
+        # 默认设置性别为男性
+        if 'xingbie' not in req_dict or not req_dict.get('xingbie'):
+            req_dict['xingbie'] = '男'
+
         # 创建用户记录
         error = jiaoshi.createbyreq(jiaoshi, jiaoshi, req_dict)
         if error != None:
