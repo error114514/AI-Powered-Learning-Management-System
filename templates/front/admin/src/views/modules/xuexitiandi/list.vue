@@ -126,6 +126,9 @@
                 <el-button v-if="isAuth('xuexitiandi','查看评论') && contents.tableBtnIcon == 1 && contents.tableBtnIconPosition == 2" type="primary" size="mini" @click="disscussListHandler(scope.row.id)">{{ contents.tableBtnFont == 1?'查看评论':'' }}<i class="el-icon-edit el-icon--right" /></el-button>
                 <el-button v-if="isAuth('xuexitiandi','查看评论') && contents.tableBtnIcon == 0" type="primary" size="mini" @click="disscussListHandler(scope.row.id)">{{ contents.tableBtnFont == 1?'查看评论':'' }}</el-button>
 
+                <el-button v-if="isAuth('xuexitiandi','查看考勤') && contents.tableBtnIcon == 1 && contents.tableBtnIconPosition == 1" type="primary" icon="el-icon-camera" size="mini" @click="showAttendanceDialog(scope.row)">{{ contents.tableBtnFont == 1?'查看考勤':'' }}</el-button>
+                <el-button v-if="isAuth('xuexitiandi','查看考勤') && contents.tableBtnIcon == 1 && contents.tableBtnIconPosition == 2" type="primary" size="mini" @click="showAttendanceDialog(scope.row)">{{ contents.tableBtnFont == 1?'查看考勤':'' }}<i class="el-icon-camera el-icon--right" /></el-button>
+                <el-button v-if="isAuth('xuexitiandi','查看考勤') && contents.tableBtnIcon == 0" type="primary" size="mini" @click="showAttendanceDialog(scope.row)">{{ contents.tableBtnFont == 1?'查看考勤':'' }}</el-button>
 
                 <el-button v-if="isAuth('xuexitiandi','删除') && contents.tableBtnIcon == 1 && contents.tableBtnIconPosition == 1" type="danger" icon="el-icon-delete" size="mini" @click="deleteHandler(scope.row.id)">{{ contents.tableBtnFont == 1?'删除':'' }}</el-button>
                 <el-button v-if="isAuth('xuexitiandi','删除') && contents.tableBtnIcon == 1 && contents.tableBtnIconPosition == 2" type="danger" size="mini" @click="deleteHandler(scope.row.id)">{{ contents.tableBtnFont == 1?'删除':'' }}<i class="el-icon-delete el-icon--right" /></el-button>
@@ -152,12 +155,15 @@
     <!-- 添加/修改页面  将父组件的search方法传递给子组件-->
     <add-or-update v-if="addOrUpdateFlag" :parent="this" ref="addOrUpdate"></add-or-update>
 
-    
+     <!-- 考勤列表弹窗 -->
+    <attendance-list ref="attendanceList" :visible.sync="attendanceDialogVisible" :course_id="selectedCourseId"></attendance-list>
+
     
       </div>
 </template>
 <script>
 import AddOrUpdate from "./add-or-update";
+import AttendanceList from "./attendance-list";
 export default {
   data() {
     return {
@@ -177,7 +183,8 @@ export default {
       addOrUpdateFlag:false,
             contents:{"searchBtnFontColor":"#333","pagePosition":"2","inputFontSize":"14px","inputBorderRadius":"4px","tableBtnDelFontColor":"rgba(249, 104, 104, 1)","tableBtnIconPosition":"1","searchBtnHeight":"40px","inputIconColor":"#C0C4CC","searchBtnBorderRadius":"4px","tableStripe":true,"btnAdAllWarnFontColor":"rgba(252, 197, 37, 1)","tableBtnDelBgColor":"#fff","searchBtnIcon":"1","tableSize":"medium","searchBtnBorderStyle":"solid","tableSelection":true,"searchBtnBorderWidth":"1px","tableContentFontSize":"14px","searchBtnBgColor":"rgba(228, 231, 234, 1)","inputTitleSize":"14px","btnAdAllBorderColor":"rgba(144, 238, 144, 1)","pageJumper":true,"btnAdAllIconPosition":"1","searchBoxPosition":"1","tableBtnDetailFontColor":"rgba(87, 199, 212, 1)","tableBtnHeight":"40px","pagePager":true,"searchBtnBorderColor":"#DCDFE6","tableHeaderFontColor":"rgba(255, 255, 255, 1)","inputTitle":"1","tableBtnBorderRadius":"4px","btnAdAllFont":"1","btnAdAllDelFontColor":"rgba(249, 104, 104, 1)","tableBtnIcon":"0","btnAdAllHeight":"40px","btnAdAllWarnBgColor":"#fff","btnAdAllBorderWidth":"1px","tableStripeFontColor":"#606266","tableBtnBorderStyle":"solid","inputHeight":"40px","btnAdAllBorderRadius":"4px","btnAdAllDelBgColor":"#fff","pagePrevNext":true,"btnAdAllAddBgColor":"#fff","searchBtnFont":"1","tableIndex":true,"btnAdAllIcon":"1","tableSortable":true,"pageSizes":true,"tableFit":true,"pageBtnBG":false,"searchBtnFontSize":"14px","tableBtnEditBgColor":"#fff","inputBorderWidth":"1px","inputFontPosition":"1","inputFontColor":"#333","pageEachNum":10,"tableHeaderBgColor":"rgba(144, 238, 144, 1)","inputTitleColor":"#333","btnAdAllBoxPosition":"1","tableBtnDetailBgColor":"#fff","inputIcon":"0","searchBtnIconPosition":"1","btnAdAllFontSize":"14px","inputBorderStyle":"solid","inputBgColor":"#fff","pageStyle":false,"pageTotal":true,"btnAdAllAddFontColor":"rgba(51, 202, 187, 1)","tableBtnFont":"1","tableContentFontColor":"rgba(72, 72, 72, 1)","inputBorderColor":"rgba(223, 230, 236, 1)","tableShowHeader":true,"tableBtnFontSize":"14px","tableBtnBorderColor":"rgba(144, 238, 144, 1)","inputIconPosition":"1","tableBorder":true,"btnAdAllBorderStyle":"solid","tableBtnBorderWidth":"1px","tableStripeBgColor":"rgba(252, 253, 254, 1)","tableBtnEditFontColor":"rgba(249, 97, 151, 1)","tableAlign":"left"},
       layouts: '',
-
+      attendanceDialogVisible: false,
+      selectedCourseId: 0,
 
     };
   },
@@ -196,7 +203,8 @@ export default {
   },
   components: {
     AddOrUpdate,
-      },
+    AttendanceList,
+  },
   methods: {
     contentStyleChange() {
       this.contentSearchStyleChange()
@@ -435,7 +443,12 @@ export default {
     },
     // 查看评论
     disscussListHandler(id,type) {
-	this.$router.push({path:'/discussxuexitiandi',query:{refid:id}});
+	    this.$router.push({path:'/discussxuexitiandi',query:{refid:id}});
+    },
+    // 显示考勤
+    showAttendanceDialog(row) {
+      this.selectedCourseId = row.id;
+      this.attendanceDialogVisible = true;
     },
         // 下载
     download(file){

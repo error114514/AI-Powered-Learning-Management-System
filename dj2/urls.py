@@ -34,7 +34,15 @@ urlpatterns = [
     re_path(r'admin/page/(?P<p1>.*)/(?P<p2>.*)$', views.admin_page2),
     re_path(r'admin/pages/(?P<p1>.*)$', views.admin_pages),
     re_path(r'admin/pages/(?P<p1>.*)/(?P<p2>.*)$', views.admin_pages2),
-    
+
+    # 考勤 API
+    path('api/attendance/', views.add_attendance),
+    re_path(r'api/courses/(?P<course_id>\d+)/attendance/$', views.get_course_attendance),
+
+    # 考勤 API(带 schemaName 前缀)
+    path('{}/api/attendance/'.format(schemaName), views.add_attendance),
+    re_path(r'{}/api/courses/(?P<course_id>\d+)/attendance/$'.format(schemaName), views.get_course_attendance),
+
     re_path(r'front/(?P<p1>.*)$', views.schema_front1),
     re_path(r'front/(?P<p1>.*)/(?P<p2>.*)$', views.schema_front2),
     re_path(r'front/(?P<p1>.*)/(?P<p2>.*)/(?P<p3>.*)$', views.schema_front3),

@@ -495,3 +495,26 @@ class discussxuexiziliao(BaseModel):
     class Meta:
         db_table = 'discussxuexiziliao'
         verbose_name = verbose_name_plural = '学习资料评论表'
+
+class attendance_records(BaseModel):
+    __doc__ = u'''attendance_records'''
+    __tablename__ = 'attendance_records'
+
+
+    __authTables__={}
+    addtime = models.DateTimeField(auto_now_add=False, verbose_name=u'创建时间')
+    course_id=models.BigIntegerField  ( null=False, unique=False,verbose_name='课程ID' )
+    user_id=models.BigIntegerField  ( null=False, unique=False,verbose_name='用户ID' )
+    attendance_time=models.DateTimeField  ( null=False, unique=False,verbose_name='考勤时间' )
+    '''
+    course_id=BigInteger
+    user_id=BigInteger
+    attendance_time=DateTime
+    '''
+    class Meta:
+        db_table = 'attendance_records'
+        verbose_name = verbose_name_plural = '考勤记录表'
+        indexes = [
+            models.Index(fields=['course_id']),
+            models.Index(fields=['user_id']),
+        ]

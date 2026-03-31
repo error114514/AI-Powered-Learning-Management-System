@@ -28,7 +28,7 @@ const menu = {
           {
             child: [
               {
-                buttons: ["查看", "修改", "删除", "查看评论", "新增"],
+                buttons: ["查看", "修改", "删除", "查看评论", "查看考勤", "新增"],
                 menu: "课程管理",
                 menuJump: "列表",
                 tableName: "xuexitiandi",
@@ -131,7 +131,7 @@ const menu = {
           {
             child: [
               {
-                buttons: ["新增", "查看", "修改", "删除", "查看评论"],
+                buttons: ["新增", "查看", "修改", "删除", "查看评论", "查看考勤"],
                 menu: "课程管理",
                 menuJump: "列表",
                 tableName: "xuexitiandi",

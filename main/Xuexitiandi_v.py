@@ -492,9 +492,6 @@ def xuexitiandi_vote(request,id_):
         return JsonResponse(msg)
 
 
-
-
-
 def xuexitiandi_attendance(request):
     '''
     学习天地考勤签到接口
@@ -503,72 +500,72 @@ def xuexitiandi_attendance(request):
     if request.method == "OPTIONS":
         return JsonResponse({})
     if request.method in ["POST", "GET"]:
-        import os
-        import base64
+        import json
         import logging
-        from util.face_util import FaceUtil
-        
+        from datetime import datetime
+        from .models import attendance_records, xuexitiandi, xuesheng
+
         msg = {"code": normal_code, "msg": "签到成功", "checked_in": False}
-        
-        # 获取登录用户ID
+
         try:
-            logged_in_user_id = str(request.session.get("params", {}).get("id"))
-        except:
-            msg['code'] = crud_error_code
-            msg['msg'] = "用户未登录"
-            return JsonResponse(msg)
-        
-        # 获取上传的文件
-        file = request.FILES.get("file")
-        if not file:
-            msg['code'] = crud_error_code
-            msg['msg'] = "未上传人脸照片"
-            return JsonResponse(msg)
-        
-        # 检查文件是否为空
-        if file.size == 0:
-            msg['code'] = crud_error_code
-            msg['msg'] = "上传的文件为空"
-            return JsonResponse(msg)
-        
-        try:
-            # 转换为Base64
-            file_bytes = file.read()
-            base64_image = base64.b64encode(file_bytes).decode('utf-8')
-            
-            # 搜索人脸
-            recognized_user_id = FaceUtil.find_face(base64_image)
-            
-            if recognized_user_id is None:
-                msg['code'] = crud_error_code
-                msg['msg'] = "未识别到人脸，请重试"
-                logging.warning(f"考勤签到：未识别到人脸，用户ID: {logged_in_user_id}")
-                return JsonResponse(msg)
-            
-            # 比较用户ID
-            if recognized_user_id == logged_in_user_id:
-                msg['checked_in'] = True
-                msg['msg'] = "考勤签到成功"
-                logging.info(f"考勤签到成功，用户ID: {logged_in_user_id}")
-                
-                # TODO: 记录考勤到数据库
-                # from datetime import datetime
-                # attendance_record = {
-                #     'user_id': logged_in_user_id,
-                #     'check_in_time': datetime.now(),
-                #     'location': 'xuexitiandi',
-                #     'face_verified': True
-                # }
-                # 保存到考勤表
-                
+            # 获取请求数据 (支持 JSON 和表单)
+            if request.content_type and 'application/json' in request.content_type:
+                data = json.loads(request.body)
             else:
+                data = request.POST
+
+            course_id = data.get('course_id')
+            user_id = data.get('user_id')
+
+            # 如果没有传入 user_id，使用 session 中的用户 ID
+            if not user_id:
+                user_id = str(request.session.get("params", {}).get("id"))
+
+            if not course_id:
                 msg['code'] = crud_error_code
-                msg['msg'] = "人脸与当前登录用户不匹配"
-                logging.warning(f"考勤签到失败：用户ID不匹配，登录用户: {logged_in_user_id}, 识别用户: {recognized_user_id}")
-                
-        except Exception as e:
-            logging.error(f"考勤签到失败: {str(e)}")
+                msg['msg'] = "缺少课程 ID"
+                return JsonResponse(msg)
+
+            if not user_id:
+                msg['code'] = crud_error_code
+                msg['msg'] = "用户未登录"
+                return JsonResponse(msg)
+
+            # 检查课程是否存在
+            course = xuexitiandi.objects.filter(id=course_id).first()
+            if not course:
+                msg['code'] = crud_error_code
+                msg['msg'] = "课程不存在"
+                return JsonResponse(msg)
+
+            # 检查用户是否存在
+            user_exists = xuesheng.objects.filter(id=user_id).exists()
+            if not user_exists:
+                msg['code'] = crud_error_code
+                msg['msg'] = "用户不存在"
+                return JsonResponse(msg)
+
+            # 创建考勤记录 - 修复 addtime 不能为 null 的问题
+            now = datetime.now()
+            attendance = attendance_records.objects.create(
+                course_id=int(course_id),
+                user_id=int(user_id),
+                attendance_time=now,
+                addtime=now  # 显式设置 addtime
+            )
+
+            msg['checked_in'] = True
+            msg['msg'] = "考勤签到成功"
+            msg['data'] = {'id': attendance.id}
+            logging.info(f"考勤记录已保存：ID={attendance.id}, course_id={course_id}, user_id={user_id}")
+
+        except json.JSONDecodeError as e:
+            logging.error(f"JSON 解析失败：{str(e)}")
             msg['code'] = crud_error_code
-            msg['msg'] = f"签到失败: {str(e)}"
-        
+            msg['msg'] = f"请求数据格式错误：{str(e)}"
+        except Exception as e:
+            logging.error(f"考勤签到失败：{str(e)}")
+            msg['code'] = crud_error_code
+            msg['msg'] = f"签到失败：{str(e)}"
+
         return JsonResponse(msg)

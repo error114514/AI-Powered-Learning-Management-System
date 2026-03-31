@@ -934,7 +934,7 @@ def img1(request, p1):
         print("{}=============>".format(sys._getframe().f_code.co_name), fullPath)
         path1 = os.path.join(os.getcwd(), "templates/front/img/", p1)
 
-        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]),path1)
+        return check_suffix(eval(eval(sys._getframe().f_code.co_name).__code__.co_varnames[-3]), path1)
 
         # try:
         #     image_data = open(path1, "rb").read()
@@ -954,3 +954,132 @@ def img1(request, p1):
         #     return HttpResponse(image_data, content_type="audio/mp3")
         # else:
         #     return HttpResponse(image_data, content_type="text/html")
+
+
+def add_attendance(request):
+    '''
+    添加考勤记录接口
+    Add attendance record endpoint
+    '''
+    if request.method == "OPTIONS":
+        return JsonResponse({})
+
+    if request.method == "POST":
+        import json
+        from datetime import datetime
+        from main.models import attendance_records, xuexitiandi, xuesheng
+
+        msg = {"code": 200, "msg": "success", "data": []}
+
+        try:
+            # 获取请求数据
+            data = json.loads(request.body)
+            user_id = data.get('user_id')
+            course_id = data.get('course_id')
+            attendance_time = data.get('attendance_time', datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+
+            if not user_id or not course_id:
+                msg['code'] = 400
+                msg['msg'] = "缺少必要参数：user_id 或 course_id"
+                return JsonResponse(msg)
+
+            # 检查课程是否存在
+            if not xuexitiandi.objects.filter(id=course_id).exists():
+                msg['code'] = 404
+                msg['msg'] = "课程不存在"
+                return JsonResponse(msg)
+
+            # 检查用户是否存在
+            if not xuesheng.objects.filter(id=user_id).exists():
+                msg['code'] = 404
+                msg['msg'] = "用户不存在"
+                return JsonResponse(msg)
+
+            # 创建考勤记录（使用 attendance_records 表）
+            attendance = attendance_records.objects.create(
+                course_id=course_id,
+                user_id=user_id,
+                attendance_time=datetime.now()
+            )
+
+            msg['msg'] = "考勤记录成功"
+            msg['data'] = {'id': attendance.id}
+
+        except Exception as e:
+            msg['code'] = 500
+            msg['msg'] = f"添加失败：{str(e)}"
+
+        return JsonResponse(msg)
+
+
+def get_course_attendance(request, course_id):
+    '''
+    获取课程考勤记录接口
+    Get course attendance records endpoint
+    '''
+    if request.method == "OPTIONS":
+        return JsonResponse({})
+
+    if request.method == "GET":
+        from main.models import attendance_records, xuexitiandi, xuesheng
+        import json
+        import logging
+
+        msg = {"code": 200, "msg": "success", "data": []}
+
+        logging.info(f"======>>>> 开始查询考勤记录，course_id: {course_id}")
+
+        try:
+            # 检查课程是否存在
+            course_exists = xuexitiandi.objects.filter(id=course_id).exists()
+            logging.info(f"======>>>> 课程是否存在：{course_exists}")
+
+            if not course_exists:
+                msg['code'] = 404
+                msg['msg'] = "课程不存在"
+                logging.warning(f"======>>>> 课程不存在：{course_id}")
+                return JsonResponse(msg)
+
+            # 查询考勤记录（从 attendance_records 表）- 移除 select_related
+            attendance_list = attendance_records.objects.filter(
+                course_id=course_id
+            ).order_by('-attendance_time')
+
+            logging.info(f"======>>>> 查询到的考勤记录数量：{len(attendance_list)}")
+
+            data = []
+            for record in attendance_list:
+                # 获取用户名 - 手动查询 xuesheng 表
+                user_name = ''
+                if record.user_id:
+                    student = xuesheng.objects.filter(id=record.user_id).first()
+                    if student:
+                        user_name = getattr(student, 'xingming', '')
+                    logging.info(f"======>>>> 用户 ID: {record.user_id}, 用户名：{user_name}")
+
+                # 获取课程名称 - 手动查询 xuexitiandi 表
+                course = xuexitiandi.objects.filter(id=record.course_id).first()
+                course_name = course.biaoti if course else ''
+
+                logging.info(
+                    f"======>>>> 考勤记录：ID={record.id}, course={course_name}, user={user_name}, time={record.attendance_time}")
+
+                attendance_record = {
+                    'id': record.id,
+                    'course_name': course_name,
+                    'user_name': user_name,
+                    'attendance_time': record.attendance_time.strftime(
+                        '%Y-%m-%d %H:%M:%S') if record.attendance_time else ''
+                }
+
+                data.append(attendance_record)
+
+            msg['data'] = data
+            logging.info(f"======>>>> 返回数据：{data}")
+
+        except Exception as e:
+            logging.error(f"======>>>> 查询异常：{str(e)}")
+            msg['code'] = 500
+            msg['msg'] = f"查询失败：{str(e)}"
+
+        return JsonResponse(msg)

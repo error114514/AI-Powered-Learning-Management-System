@@ -483,24 +483,86 @@
 								'Token': token
 							},
 							success: function(res) {
-								console.log('=== API响应:', res);
+								console.log('=== API 响应:', res);
+								console.log('=== Response code:', res.code);
+								console.log('=== Response result:', res.result);
 								that.checkingIn = false;
+
+								// 检查是否有人脸识别结果
 								if (res.code === 0 && res.result) {
-									console.log('=== 匹配的用户ID:', res.result);
-									console.log('=== 当前登录用户ID:', userid);
+									console.log('=== 匹配的用户 ID:', res.result);
+									console.log('=== 当前登录用户 ID:', userid);
+									console.log('=== 类型比较:', typeof res.result, typeof userid);
+
 									if (res.result === userid || res.result === String(userid)) {
-										layui.layer.msg('考勤打卡成功', {time: 2000, icon: 6});
-										that.showAttendanceDialog = false;
-										// TODO: Call attendance recording API when implemented
+										// 人脸识别成功，现在调用考勤记录保存接口
+										console.log('✅ 人脸验证通过，开始保存考勤记录');
+
+										// 获取课程 ID
+										var courseId = vue.detail.id;
+										console.log('=== 课程 ID:', courseId);
+
+										// 创建考勤记录
+										var attendanceData = {
+											course_id: courseId,
+											user_id: userid,
+											attendance_time: new Date().toISOString()
+										};
+
+										console.log('=== 请求 URL:', layui.http.baseurl + 'xuexitiandi/attendance');
+										console.log('=== 请求数据:', attendanceData);
+
+										layui.jquery.ajax({
+											url: layui.http.baseurl + 'xuexitiandi/attendance',
+											type: 'POST',
+											data: JSON.stringify(attendanceData),
+											contentType: 'application/json',
+											headers: {
+												'Token': token
+											},
+											success: function(attendanceRes) {
+												console.log('✅ 考勤记录保存结果:', attendanceRes);
+												if (attendanceRes.code === 0) {
+													console.log('✅ 考勤记录已成功写入数据库');
+													layui.layer.msg('考勤打卡成功', {time: 2000, icon: 6});
+												} else {
+													console.error('❌ 考勤记录保存失败:', attendanceRes);
+													layui.layer.msg('考勤记录保存失败：' + (attendanceRes.msg || '未知错误'), {time: 2000, icon: 5});
+												}
+												that.showAttendanceDialog = false;
+											},
+											error: function(xhr, status, error) {
+												console.error('❌ 保存考勤记录失败 ===');
+												console.error('Status:', status);
+												console.error('Error:', error);
+												console.error('Response:', xhr.responseText);
+												console.error('Response Headers:', xhr.getAllResponseHeaders());
+
+												// 尝试解析错误信息
+												try {
+													var errRes = JSON.parse(xhr.responseText);
+													console.error('Parsed error response:', errRes);
+												} catch(e) {
+													console.error('无法解析错误响应');
+												}
+
+												// 即使保存失败也显示成功 (因为人脸已验证)
+												layui.layer.msg('考勤打卡成功 (记录保存失败)', {time: 2000, icon: 6});
+												that.showAttendanceDialog = false;
+											}
+										});
+
 									} else {
+										console.error('❌ 用户 ID 不匹配');
 										layui.layer.msg('人脸与当前登录用户不匹配', {time: 2000, icon: 5});
 									}
 								} else {
+									console.error('❌ 人脸识别失败或无结果');
 									layui.layer.msg(res.msg || '人脸识别失败，请重试', {time: 2000, icon: 5});
 								}
 							},
 							error: function(xhr, status, error) {
-								console.error('=== AJAX错误 ===');
+								console.error('=== AJAX 错误 ===');
 								console.error('Status:', status);
 								console.error('Error:', error);
 								console.error('Response:', xhr.responseText);
@@ -517,14 +579,16 @@
 					},
 					// 正常考勤打卡
 					checkInNormalAttendance() {
+						console.log('======>>>> 开始正常考勤打卡');
+
 						var token = localStorage.getItem('Token');
 						var userid = localStorage.getItem('userid');
 
-						console.log('=== 开始正常考勤打卡 ===');
-						console.log('Token:', token);
-						console.log('UserID:', userid);
+						console.log('======>>>> Token:', token);
+						console.log('======>>>> UserID:', userid);
 
 						if (!token || token === 'null' || token === '') {
+							console.log('======>>>> Token invalid');
 							layui.layer.msg('登录已过期，请重新登录', {time: 2000, icon: 5});
 							setTimeout(function() {
 								window.location.href = '../login.html';
@@ -534,13 +598,60 @@
 
 						this.checkingIn = true;
 
-						// 模拟考勤请求
-						setTimeout(() => {
-							this.checkingIn = false;
-							layui.layer.msg('考勤打卡成功', {time: 2000, icon: 6});
-							this.showNormalAttendanceDialog = false;
-							// TODO: Call attendance recording API when implemented
-						}, 1000);
+						// 获取课程 ID
+						var courseId = vue.detail.id;
+						console.log('======>>>> 课程 ID:', courseId);
+
+						// 创建考勤记录
+						var attendanceData = {
+							course_id: courseId,
+							user_id: userid,
+							attendance_time: new Date().toISOString()
+						};
+
+						console.log('======>>>> 请求 URL:', layui.http.baseurl + 'xuexitiandi/attendance');
+						console.log('======>>>> 请求数据:', attendanceData);
+
+						var that = this;
+						layui.jquery.ajax({
+							url: layui.http.baseurl + 'xuexitiandi/attendance',
+							type: 'POST',
+							data: JSON.stringify(attendanceData),
+							contentType: 'application/json',
+							headers: {
+								'Token': token
+							},
+							success: function(attendanceRes) {
+								console.log('======>>>> ✅ 考勤记录保存结果:', attendanceRes);
+								that.checkingIn = false;
+
+								if (attendanceRes.code === 0) {
+									console.log('======>>>> ✅ 考勤记录已成功写入数据库');
+									layui.layer.msg('考勤打卡成功', {time: 2000, icon: 6});
+								} else {
+									console.error('======>>>> ❌ 考勤记录保存失败:', attendanceRes);
+									layui.layer.msg('考勤记录保存失败：' + (attendanceRes.msg || '未知错误'), {time: 2000, icon: 5});
+								}
+								that.showNormalAttendanceDialog = false;
+							},
+							error: function(xhr, status, error) {
+								console.error('======>>>> ❌ 保存考勤记录失败 ===');
+								console.error('======>>>> Status:', status);
+								console.error('======>>>> Error:', error);
+								console.error('======>>>> Response:', xhr.responseText);
+								that.checkingIn = false;
+
+								// 尝试解析错误信息
+								try {
+									var errRes = JSON.parse(xhr.responseText);
+									console.error('======>>>> Parsed error response:', errRes);
+									layui.layer.msg('考勤打卡失败：' + (errRes.msg || '网络错误'), {time: 2000, icon: 5});
+								} catch(e) {
+									console.error('======>>>> 无法解析错误响应');
+									layui.layer.msg('考勤打卡失败，请重试', {time: 2000, icon: 5});
+								}
+							}
+						});
 					}
 
 
