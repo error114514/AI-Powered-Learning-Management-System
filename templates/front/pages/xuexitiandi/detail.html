@@ -81,15 +81,26 @@
 						<a><cite :style='{"padding":"8px 15px","boxShadow":"0 0 6px rgba(255,0,0,.3)","margin":"0 15px","backgroundColor":"#fff","color":"#1976d2","borderRadius":"10px","borderWidth":"0","fontSize":"16px","borderStyle":"solid"}'>{{title}}</cite></a>
 					</span>
 
-					                    <a :style='{"padding":"0 12px","boxShadow":"0 0 6px rgba(255,0,0,.3)","backgroundColor":"#fff","color":"rgba(0, 0, 0, 1)","borderRadius":"4px","borderWidth":"0","fontSize":"16px","lineHeight":"34px","borderStyle":"solid"}' @click="storeUp()" href="javascript:void(0)">
+					<a :style='{"padding":"0 12px","boxShadow":"0 0 6px rgba(255,0,0,.3)","backgroundColor":"#fff","color":"rgba(0, 0, 0, 1)","borderRadius":"4px","borderWidth":"0","fontSize":"16px","lineHeight":"34px","borderStyle":"solid"}' @click="storeUp()" href="javascript:void(0)">
 						<i class="layui-icon" style="font-size: 20px;color: red;" v-if='true' :style='{"color":"red","padding":"0 2px 0 0","fontSize":"18px"}'>&#xe67a;</i>点我收藏
 					</a>
-					<a :style='{"padding":"0 12px","boxShadow":"0 0 6px rgba(103, 194, 58, 1)","margin":"0 0 0 10px","backgroundColor":"rgba(103, 194, 58, 1)","color":"#fff","borderRadius":"4px","borderWidth":"0","fontSize":"16px","lineHeight":"34px","borderStyle":"solid"}' @click="showAttendanceDialog = true" href="javascript:void(0)">
-						<i class="layui-icon" style="font-size: 20px;" v-if='true' :style='{"padding":"0 2px 0 0","fontSize":"18px"}'>&#xe67c;</i>人脸识别考勤
-					</a>
-					<a :style='{"padding":"0 12px","boxShadow":"0 0 6px rgba(0, 123, 255, 1)","margin":"0 0 0 10px","backgroundColor":"rgba(0, 123, 255, 1)","color":"#fff","borderRadius":"4px","borderWidth":"0","fontSize":"16px","lineHeight":"34px","borderStyle":"solid"}' @click="showNormalAttendanceDialog = true" href="javascript:void(0)">
-						<i class="layui-icon" style="font-size: 20px;" v-if='true' :style='{"padding":"0 2px 0 0","fontSize":"18px"}'>&#xe6b2;</i>正常考勤
-					</a>
+
+					<!-- 学生端按钮 - 仅学生可见 -->
+					<template v-if="userRole === 'xuesheng'">
+						<a :style='{"padding":"0 12px","boxShadow":"0 0 6px rgba(255, 0, 0, 1)","backgroundColor":"rgba(255, 0, 0, 1)","color":"#fff","borderRadius":"4px","borderWidth":"0","fontSize":"16px","lineHeight":"34px","borderStyle":"solid"}' @click="showAttendanceDialog = true" href="javascript:void(0)">
+							<i class="layui-icon" style="font-size: 20px;" v-if='true' :style='{"padding":"0 2px 0 0","fontSize":"18px"}'>&#xe67c;</i>人脸识别考勤
+						</a>
+						<a :style='{"padding":"0 12px","boxShadow":"0 0 6px rgba(0, 123, 255, 1)","margin":"0 0 0 10px","backgroundColor":"rgba(0, 123, 255, 1)","color":"#fff","borderRadius":"4px","borderWidth":"0","fontSize":"16px","lineHeight":"34px","borderStyle":"solid"}' @click="showNormalAttendanceDialog = true" href="javascript:void(0)">
+							<i class="layui-icon" style="font-size: 20px;" v-if='true' :style='{"padding":"0 2px 0 0","fontSize":"18px"}'>&#xe6b2;</i>正常考勤
+						</a>
+					</template>
+
+					<!-- 教师端按钮 - 仅教师可见 -->
+					<template v-if="userRole === 'jiaoshi'">
+						<a :style='{"padding":"0 12px","boxShadow":"0 0 6px rgba(103, 194, 58, 1)","backgroundColor":"rgba(103, 194, 58, 1)","color":"#fff","borderRadius":"4px","borderWidth":"0","fontSize":"16px","lineHeight":"34px","borderStyle":"solid"}' @click="showTeacherFaceSignInDialog = true" href="javascript:void(0)">
+							<i class="layui-icon" style="font-size: 20px;" v-if='true' :style='{"padding":"0 2px 0 0","fontSize":"18px"}'>&#xe67c;</i>教师人脸识别签到
+						</a>
+					</template>
 
 				</div>
 				<div class="layui-row" style="display: flex">
@@ -253,6 +264,39 @@
 				</div>
 			</div>
 
+			<!-- Teacher Face Sign In Dialog -->
+			<div v-show="showTeacherFaceSignInDialog" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 9999;">
+				<div style="background: white; padding: 30px; border-radius: 10px; width: 400px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+					<h3 style="margin: 0 0 20px 0; text-align: center; color: #333;">教师人脸识别签到</h3>
+					<p style="margin-bottom: 20px; color: #666; text-align: center;">请上传包含学生的人脸照片或视频进行批量签到</p>
+					<input type="file" id="teacherFaceSignInInput" accept="image/*,video/*" style="display: none;">
+					<div style="text-align: center; margin-bottom: 20px;">
+						<button @click="selectTeacherFaceSignInFile" type="button" class="layui-btn" style="margin-right: 10px;">
+							<i class="layui-icon">&#xe67c;</i> 选择照片/视频
+						</button>
+						<button @click="teacherFaceSignIn" type="button" class="layui-btn layui-btn-normal" :disabled="checkingIn || !teacherFaceSignInFile">
+							<i class="layui-icon">&#xe605;</i> {{ checkingIn ? '识别中...' : '开始签到' }}
+						</button>
+					</div>
+					<div v-if="teacherFaceSignInFile" style="text-align: center; margin-bottom: 20px;">
+						<p style="color: #666; font-size: 14px;">已选择：{{ teacherFaceSignInFile.name }}</p>
+					</div>
+					<div v-if="matchedStudents && matchedStudents.length > 0" style="max-height: 200px; overflow-y: auto; border: 1px solid #ddd; padding: 10px; margin-bottom: 20px;">
+						<h4 style="margin: 0 0 10px 0; color: #1976d2;">成功匹配的学生 ({{ matchedStudents.length }})</h4>
+						<ul style="list-style: none; padding: 0; margin: 0;">
+							<li v-for="(student, index) in matchedStudents" :key="index" style="padding: 5px 0; border-bottom: 1px solid #eee;">
+								<i class="layui-icon" style="color: #1976d2;">&#xe605;</i> {{ student.name }}
+							</li>
+						</ul>
+					</div>
+					<div style="text-align: center; margin-top: 20px;">
+						<button @click="closeTeacherFaceSignInDialog" type="button" class="layui-btn layui-btn-primary">
+							关闭
+						</button>
+					</div>
+				</div>
+			</div>
+
 		</div>
 
 		<script src="../../layui/layui.js"></script>
@@ -289,9 +333,38 @@
 					// 考勤相关
 					showAttendanceDialog: false,
 					showNormalAttendanceDialog: false,
+					showTeacherFaceSignInDialog: false,
 					attendanceFace: null,
 					attendancePreviewUrl: '',
-					checkingIn: false
+					teacherFaceSignInFile: null,
+					matchedStudents: [],
+					checkingIn: false,
+					userRole: ''
+				},
+				destroyed: function() {
+					window.clearInterval(this.inter);
+				},
+				created() {
+					// 获取用户角色
+					const role = localStorage.getItem('role');
+					console.log('======>>>> 从 localStorage 获取到的 role:', role);
+					console.log('======>>>> localStorage 所有数据:', localStorage);
+					if (role) {
+						// 将中文角色转换为英文角色
+						if (role === '学生') {
+							this.userRole = 'xuesheng';
+						} else if (role === '教师') {
+							this.userRole = 'jiaoshi';
+						} else {
+							// 如果已经是英文，直接使用
+							this.userRole = role;
+						}
+					} else {
+						// 默认设置为学生
+						this.userRole = 'xuesheng';
+					}
+					console.log('======>>>> 最终设置的用户角色:', this.userRole);
+					console.log('======>>>> userRole === "xuesheng":', this.userRole === 'xuesheng');
 				},
 				// 倒计时效果
 				computed: {
@@ -641,7 +714,6 @@
 								console.error('======>>>> Response:', xhr.responseText);
 								that.checkingIn = false;
 
-								// 尝试解析错误信息
 								try {
 									var errRes = JSON.parse(xhr.responseText);
 									console.error('======>>>> Parsed error response:', errRes);
@@ -652,8 +724,105 @@
 								}
 							}
 						});
-					}
+					},
 
+					// 教师人脸签到相关方法
+					selectTeacherFaceSignInFile() {
+						console.log('======>>>> selectTeacherFaceSignInFile called');
+						var input = document.getElementById('teacherFaceSignInInput');
+						console.log('======>>>> teacherFaceSignInInput element:', input);
+						if (input) {
+							input.click();
+						} else {
+							console.error('======>>>> teacherFaceSignInInput element not found');
+							layui.layer.msg('文件选择器未找到', {time: 2000, icon: 5});
+						}
+					},
+
+					teacherFaceSignIn() {
+						console.log('======>>>> 开始教师人脸签到');
+						console.log('======>>>> Token:', localStorage.getItem('Token'));
+						console.log('======>>>> Course ID:', vue.detail.id);
+						console.log('======>>>> Selected File:', this.teacherFaceSignInFile);
+
+						var token = localStorage.getItem('Token');
+						var courseId = vue.detail.id;
+
+						if (!token || token === 'null') {
+							layui.layer.msg('登录已过期', {time: 2000, icon: 5});
+							return;
+						}
+
+						if (!this.teacherFaceSignInFile) {
+							layui.layer.msg('请先选择文件', {time: 2000, icon: 5});
+							return;
+						}
+
+						this.checkingIn = true;
+						this.matchedStudents = [];
+
+						var formData = new FormData();
+						formData.append('file', this.teacherFaceSignInFile);
+
+						var that = this;
+						var url = layui.http.baseurl + 'courses/' + courseId + '/teacher_face_sign_in';
+						console.log('======>>>> Request URL:', url);
+						console.log('======>>>> FormData contents:');
+						for (var pair of formData.entries()) {
+							console.log(pair[0] + ': ' + pair[1]);
+						}
+
+						layui.jquery.ajax({
+							url: url,
+							type: 'POST',
+							data: formData,
+							processData: false,
+							contentType: false,
+							headers: {
+								'Token': token
+							},
+							success: function(res) {
+								console.log('======>>>> ✅ 教师人脸签到响应:', res);
+								that.checkingIn = false;
+
+								if (res.code === 0) {
+									that.matchedStudents = res.data.matched_students || [];
+									console.log('======>>>> 匹配到的学生列表:', that.matchedStudents);
+
+									if (that.matchedStudents.length > 0) {
+										layui.layer.msg('成功匹配 ' + that.matchedStudents.length + ' 名学生', {time: 2000, icon: 6});
+									} else {
+										layui.layer.msg('未找到符合条件的学生', {time: 2000, icon: 3});
+									}
+								} else {
+									layui.layer.msg('签到失败：' + (res.msg || '未知错误'), {time: 2000, icon: 5});
+								}
+							},
+							error: function(xhr, status, error) {
+								console.error('======>>>> ❌ 教师人脸签到失败 ===');
+								console.error('======>>>> Status:', status);
+								console.error('======>>>> Error:', error);
+								console.error('======>>>> Response:', xhr.responseText);
+								console.error('======>>>> Response Headers:', xhr.getAllResponseHeaders());
+								that.checkingIn = false;
+
+								try {
+									var errRes = JSON.parse(xhr.responseText);
+									console.error('======>>>> Parsed error response:', errRes);
+									layui.layer.msg('签到失败：' + (errRes.msg || '网络错误'), {time: 2000, icon: 5});
+								} catch(e) {
+									console.error('======>>>> 无法解析错误响应');
+									layui.layer.msg('签到失败，请重试', {time: 2000, icon: 5});
+								}
+							}
+						});
+					},
+
+					closeTeacherFaceSignInDialog() {
+						this.showTeacherFaceSignInDialog = false;
+						this.teacherFaceSignInFile = null;
+						this.matchedStudents = [];
+					}
 
 				}
 			})
@@ -688,6 +857,23 @@
 					});
 				} else {
 					console.error('attendanceInput element not found during setup');
+				}
+
+				// Teacher Face Sign In file selection handler
+				var teacherFaceSignInInput = document.getElementById('teacherFaceSignInInput');
+				console.log('Setting up teacherFaceSignInInput listener, element:', teacherFaceSignInInput);
+				if (teacherFaceSignInInput) {
+					teacherFaceSignInInput.addEventListener('change', function(e) {
+						console.log('Teacher file input changed, files:', e.target.files);
+						const file = e.target.files[0];
+						if (file) {
+							console.log('Teacher file selected:', file.name, file.size, file.type);
+							vue.$set(vue, 'teacherFaceSignInFile', file);
+							layer.msg('已选择文件：' + file.name, {time: 1500, icon: 6});
+						}
+					});
+				} else {
+					console.error('teacherFaceSignInInput element not found during setup');
 				}
 
 				var limit = 10;

@@ -3,7 +3,7 @@ __author__ = "ila"
 
 import os
 from django.urls import path
-from main import users_v, config_v, schema_v, ai_chat
+from main import users_v, config_v, schema_v, ai_chat, Courses_v
 
 # from dj2.settings import dbName as schemaName
 
@@ -18,6 +18,7 @@ urlpatterns = [
     path(r'users/info/<id_>', users_v.users_info),
     path(r'users/update', users_v.users_update),
     path(r'users/delete', users_v.users_delete),
+    path(r'courses/<int:course_id>/teacher_face_sign_in', Courses_v.teacher_face_sign_in),
 
     path(r'config/page', config_v.config_page),
     path(r'config/list', config_v.config_list),
@@ -37,6 +38,7 @@ excludeList = [
     "schema_v.py",
     "users_v.py",
     "config_v.py",
+    "Courses_v.py",  # 排除 Courses_v.py，因为它已经在上面手动导入了
 ]
 
 # 循环当前目录下的py文件
@@ -51,6 +53,9 @@ for i in os.listdir(mainDir):
 import_str = '\n'.join(view_tuple)
 # print(import_str)
 exec(import_str)
+
+# 定义需要 attendance 接口的表
+attendance_tables = ["xuexitiandi"]
 
 for i in os.listdir(mainDir):
     if i not in excludeList and i[-5:] == "_v.py":
@@ -94,6 +99,15 @@ for i in os.listdir(mainDir):
             ]
         )
 
+        # 只为特定的表添加 attendance 接口
+        if tableName.lower() in attendance_tables:
+            urlpatterns.extend(
+                [
+                    path(r'{}/attendance'.format(tableName.lower()),
+                         eval("{}_v.{}_attendance".format(tableName.capitalize(), tableName.lower()))),
+                ]
+            )
+
         # examrecord特定接口
         if tableName.lower() == "examrecord":
             urlpatterns.extend(
@@ -111,15 +125,6 @@ for i in os.listdir(mainDir):
                 [
                     path(r'{}/verify_face'.format(tableName.lower()),
                          eval("{}_v.{}_verify_face".format(tableName.capitalize(), tableName.lower()))),
-                ]
-            )
-        
-        # xuexitiandi特定接口 - 考勤签到
-        if tableName.lower() == "xuexitiandi":
-            urlpatterns.extend(
-                [
-                    path(r'{}/attendance'.format(tableName.lower()),
-                         eval("{}_v.{}_attendance".format(tableName.capitalize(), tableName.lower()))),
                 ]
             )
 
