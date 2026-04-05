@@ -15,9 +15,9 @@ class FaceUtil:
     """百度人脸识别API封装类"""
     
     # API配置
-    API_KEY = "ql21uVftf13jXL0FGEkFCCzH"
-    SECRET_KEY = "81L7L2FRTMcEkuMr3opuyx8cccXsEw20"
-    GROUP_ID = "aabb"
+    API_KEY = os.environ.get('BAIDU_FACE_API_KEY', '')
+    SECRET_KEY = os.environ.get('BAIDU_FACE_SECRET_KEY', '')
+    GROUP_ID = os.environ.get('BAIDU_FACE_GROUP_ID', 'aabb')
     
     # API端点
     TOKEN_URL = "https://aip.baidubce.com/oauth/2.0/token"

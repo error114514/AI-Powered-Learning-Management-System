@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(choco install:*)",
+      "Bash(powershell -Command \"Invoke-WebRequest -Uri https://github.com/cli/cli/releases/latest/download/gh-cli-windows-amd64.msi -OutFile gh-cli-windows-amd64.msi; Start-Process -FilePath gh-cli-windows-amd64.msi -ArgumentList '/quiet' -Wait\")",
+      "Bash(python:*)",
+      "WebSearch",
+      "Bash(gh issue:*)",
+      "Bash(pip install:*)",
+      "Bash(export DJANGO_SETTINGS_MODULE=dj2.settings)",
+      "Bash(flake8:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}

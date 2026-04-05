@@ -146,6 +146,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# 百度人脸识别API配置
+BAIDU_FACE_API_KEY = os.environ.get('BAIDU_FACE_API_KEY', '')
+BAIDU_FACE_SECRET_KEY = os.environ.get('BAIDU_FACE_SECRET_KEY', '')
+BAIDU_FACE_GROUP_ID = os.environ.get('BAIDU_FACE_GROUP_ID', 'aabb')
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 

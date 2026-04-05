@@ -1,8 +1,11 @@
 # coding:utf-8
 # author:ila
-import base64, copy
+import jwt
+import datetime
+import copy
 from django.http import JsonResponse
 from django.apps import apps
+from django.conf import settings
 
 from util.codes import *
 from util import message as mes
@@ -20,10 +23,17 @@ class Auth(object):
         tablename = model.__tablename__
         encode_dict = {"tablename": tablename, "params": req_dict}
 
-        encode_str = base64.b64encode(str(encode_dict).encode("utf-8"))
+        # 生成JWT token
+        payload = {
+            'tablename': tablename,
+            'params': req_dict,
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24)  # 24小时过期
+        }
+
+        token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
         msg['data']["id"] = req_dict.get("id")
         msg["id"] = req_dict.get("id")
-        msg['token'] = encode_str.decode('utf-8')
+        msg['token'] = token
         return JsonResponse(msg)
 
     def identify(self, request):
@@ -42,14 +52,12 @@ class Auth(object):
             auth_token = copy.deepcopy(token)
 
             try:
-                decode_str = base64.b64decode(auth_token).decode("utf8")
-            except (UnicodeDecodeError, Exception) as e:
+                # 解码JWT token
+                decode_dict = jwt.decode(auth_token, settings.SECRET_KEY, algorithms=['HS256'])
+            except (jwt.ExpiredSignatureError, jwt.InvalidTokenError, Exception) as e:
                 msg['code'] = 401
-                msg['msg'] = 'token解码失败，请重新登录'
+                msg['msg'] = 'token验证失败，请重新登录'
                 return msg
-
-            decode_str=decode_str.replace('"null"','""').replace('null','""')
-            decode_dict = eval(decode_str)
 
             tablename2 = decode_dict.get("tablename")
 
