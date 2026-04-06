@@ -9,7 +9,7 @@ from .models import xuesheng, examrecord, xuexitiandi, xuexiziliao, discussxuexi
 import random
 
 # DeepSeek API 配置
-DEEPSEEK_API_KEY = 'sk-110104bc985447b0b511543ae724a430'
+DEEPSEEK_API_KEY = 'sk-615072d1113d47768b9cb0968f2c0179'
 DEEPSEEK_API_URL = 'https://api.deepseek.com/v1/chat/completions'
 
 

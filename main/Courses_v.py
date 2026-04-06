@@ -1,5 +1,6 @@
 # coding:utf-8
 __author__ = "ila"
+
 import copy
 import base64
 import logging
@@ -8,16 +9,16 @@ from django.shortcuts import render
 from django.apps import apps
 from django.db.models import Q
 from django.db import transaction
-from .models import xuexitiandi, xuesheng
+from .models import xuexitiandi, xuesheng, attendance_records
 from util.codes import *
 from util.auth import Auth
 import util.message as mes
 from util.face_util import FaceUtil
 from util import message as mes
 import datetime
-from .model import Attendance
 
 logger = logging.getLogger(__name__)
+
 
 def teacher_face_sign_in(request, course_id):
     """
@@ -74,7 +75,21 @@ def teacher_face_sign_in(request, course_id):
             msg['data'] = {'matched_students': []}
             return JsonResponse(msg)
 
-        # 提取人脸特征并进行比对
+        # 使用新方法：一次性检测合照中的所有人脸并匹配
+        logger.info(f"开始识别合照中的人脸，共有 {len(enrolled_students)} 名学生需要比对")
+
+        # 打印所有学生的ID用于调试
+        student_ids = [str(s.id) for s in enrolled_students]
+        logger.info(f"数据库中的学生ID列表: {student_ids}")
+
+        matched_faces = FaceUtil.find_multiple_faces(base64_image)
+        logger.info(f"百度API返回的匹配结果: {matched_faces}")
+
+        # 构建已匹配用户ID集合
+        matched_user_ids = set([item['user_id'] for item in matched_faces])
+        logger.info(f"合照中识别到的用户ID: {matched_user_ids}")
+
+        # 根据识别结果匹配学生
         matched_students = []
         unmatched_students = []
 
@@ -88,53 +103,43 @@ def teacher_face_sign_in(request, course_id):
                     'name': student.xingming,
                     'reason': '没有人脸照片'
                 })
+                logger.info(f"学生 {student.xingming} (ID:{student.id}) 未匹配：没有人脸照片")
                 continue
 
-            try:
-                # 调用 FaceUtil 进行人脸比对
-                recognized_user_id = FaceUtil.find_face(base64_image)
-
-                if recognized_user_id and str(recognized_user_id) == str(student.id):
-                    matched_students.append({
-                        'id': student.id,
-                        'name': student.xingming
-                    })
-                else:
-                    unmatched_students.append({
-                        'id': student.id,
-                        'name': student.xingming,
-                        'reason': '人脸不匹配'
-                    })
-            except Exception as e:
-                logger.error(f"人脸比对失败：{str(e)}")
+            # 检查学生ID是否在识别结果中
+            if str(student.id) in matched_user_ids:
+                matched_students.append({
+                    'id': student.id,
+                    'name': student.xingming
+                })
+                logger.info(f"✅ 学生 {student.xingming} (ID:{student.id}) 匹配成功")
+            else:
                 unmatched_students.append({
                     'id': student.id,
                     'name': student.xingming,
-                    'reason': f'人脸识别错误：{str(e)}'
+                    'reason': '未在合照中识别到'
                 })
+                logger.info(f"❌ 学生 {student.xingming} (ID:{student.id}) 未匹配：未在合照或视频中识别到")
 
         # 创建签到记录
+        now = datetime.datetime.now()
         for student in matched_students:
-            # 检查是否已经签到
-            existing_record = Attendance.objects.filter(
+            # 检查是否已经签到（今天）
+            existing_record = attendance_records.objects.filter(
                 course_id=course_id,
-                student_id=student['id'],
-                timestamp__date=datetime.date.today()
+                user_id=student['id'],
+                attendance_time__date=now.date()
             ).first()
 
             if not existing_record:
                 # 创建新的签到记录
-                attendance_data = {
-                    'course_id': course_id,
-                    'student_id': student['id'],
-                    'timestamp': datetime.datetime.now(),
-                    'method': 'teacher_face_sign_in',
-                    'source_image_id': file.name,
-                    'status': 'signed_in'
-                }
-
-                with transaction.atomic():
-                    Attendance.objects.create(**attendance_data)
+                attendance_records.objects.create(
+                    course_id=course_id,
+                    user_id=student['id'],
+                    attendance_time=now,
+                    addtime=now
+                )
+                logger.info(f"创建签到记录：学生 {student['name']} (ID:{student['id']})")
 
         # 构建响应
         if matched_students:
@@ -159,9 +164,12 @@ def teacher_face_sign_in(request, course_id):
 
     except Exception as e:
         logger.error(f"教师人脸识别签到失败：{str(e)}")
+        import traceback
+        traceback.print_exc()
         msg['code'] = crud_error_code
         msg['msg'] = f'签到失败：{str(e)}'
         return JsonResponse(msg)
+
 
 def xuexitiandi_attendance(request):
     """
