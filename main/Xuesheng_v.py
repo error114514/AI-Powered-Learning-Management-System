@@ -181,7 +181,8 @@ def xuesheng_resetPass(request):
 
 
 def xuesheng_session(request):
-    '''
+    ''''
+    获取session中的用户信息
     '''
     if request.method == "OPTIONS":
         return JsonResponse({})
@@ -189,7 +190,30 @@ def xuesheng_session(request):
         msg = {"code": normal_code,"msg": mes.normal_code, "data": {}}
 
         req_dict={"id":request.session.get('params').get("id")}
-        msg['data']  = xuesheng.getbyparams(xuesheng, xuesheng, req_dict)[0]
+        data = xuesheng.getbyparams(xuesheng, xuesheng, req_dict)
+
+        if len(data) > 0:
+            msg['data'] = data[0]
+
+            # 检查照片文件是否存在，如果不存在则尝试从 media/face 目录查找
+            photo_filename = msg['data'].get('zhaopian')
+            if photo_filename:
+                # 检查 templates/front 目录下是否存在
+                front_path = os.path.join(os.getcwd(), "templates", "front", photo_filename)
+                if not os.path.exists(front_path):
+                    # 尝试从 media/face 目录查找
+                    media_face_path = os.path.join(os.getcwd(), "media", "face", photo_filename)
+                    if os.path.exists(media_face_path):
+                        logger.info(f"照片文件在 media/face 目录找到: {photo_filename}")
+                        # 复制文件到 templates/front 目录
+                        import shutil
+                        try:
+                            shutil.copy2(media_face_path, front_path)
+                            logger.info(f"已复制照片到 templates/front: {photo_filename}")
+                        except Exception as e:
+                            logger.warning(f"复制照片失败: {str(e)}")
+                    else:
+                        logger.warning(f"照片文件不存在: {photo_filename}")
 
         return JsonResponse(msg)
 
@@ -531,7 +555,7 @@ def xuesheng_detail(request,id_):
             ret=xuesheng.updatebyparams(xuesheng,xuesheng,click_dict)
             if ret!=None:
                 msg['code'] = crud_error_code
-                msg['msg'] = retfo
+                msg['msg'] = ret
         return JsonResponse(msg)
 
 
