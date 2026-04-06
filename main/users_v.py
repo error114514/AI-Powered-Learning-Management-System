@@ -17,19 +17,8 @@ def users_login(request):
         req_dict = request.session.get("req_dict")
         if req_dict.get('role')!=None:
             del req_dict['role']
-
-        # 获取用户
         datas = users.getbyparams(users, users, req_dict)
         if not datas:
-            msg['code'] = password_error_code
-            msg['msg'] = mes.password_error_code
-            return JsonResponse(msg)
-
-        user = users.getbyid(users, users, datas[0].get('id'))[0]
-
-        # 验证密码
-        password = req_dict.get('password')
-        if not user.check_password(password):
             msg['code'] = password_error_code
             msg['msg'] = mes.password_error_code
             return JsonResponse(msg)
@@ -44,13 +33,6 @@ def users_register(request):
     if request.method in ["POST", "GET"]:
         msg = {'code': normal_code, "msg": mes.normal_code}
         req_dict = request.session.get("req_dict")
-
-        # 获取密码并哈希
-        password = req_dict.get('password')
-        if password:
-            user = users()
-            user.set_password(password)
-            req_dict['password'] = user.password
 
         error = users.createbyreq(users, users, req_dict)
         if error != None:
